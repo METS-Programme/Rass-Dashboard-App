@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="#fff"
+    android:layout_height="match_parent">
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:stretchColumns="1">
+
+            <!-- Section for stock status Rate -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_margin="10dp"
+                android:id="@+id/rt_stock_out"
+                android:layout_height="wrap_content">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:id="@+id/card1"
+                    app:cardCornerRadius="5dp"
+                    android:layout_margin="5dp"
+                    android:layout_height="wrap_content">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_weight="2"
+                        android:layout_height="wrap_content">
+
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_centerInParent="true"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/txtName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Stock Out Rate : 2019W35(Uganda)"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                android:textColor="@color/black" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:id="@+id/txtphone"
+                                android:layout_below="@+id/txtName"
+                                android:textColor="@color/black"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                                android:layout_height="wrap_content"
+                                android:text="0%"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:id="@+id/txtdetails"
+                                android:layout_below="@+id/txtphone"
+                                android:textColor="@color/black"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                android:layout_height="wrap_content"
+                                android:text="0 of 0 Health Facilities Reported [Missing Reports]"/>
+
+                        </RelativeLayout>
+
+                    </RelativeLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </RelativeLayout>
+            <!-- Section for reporting rate -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:id="@+id/rt_rpt_rate"
+                android:layout_margin="10dp"
+                android:layout_below="@+id/rt_stock_out"
+                android:layout_height="wrap_content">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:id="@+id/rptratecardview"
+                    app:cardCornerRadius="5dp"
+                    android:layout_margin="5dp"
+                    android:layout_height="wrap_content">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_weight="2"
+                        android:layout_height="wrap_content">
+
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_centerInParent="true"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:id="@+id/txtNamerpt"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                android:textColor="@color/black"
+                                android:layout_height="wrap_content"
+                                android:text="Reporting Rate : 2019W35(Uganda)"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:id="@+id/txtpercentagerpt"
+                                android:layout_below="@+id/txtNamerpt"
+                                android:textColor="@color/black"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                                android:layout_height="wrap_content"
+                                android:text="0%"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:id="@+id/txtdetailsrpt"
+                                android:layout_below="@+id/txtpercentagerpt"
+                                android:textColor="@color/black"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                android:layout_height="wrap_content"
+                                android:text="0 of 0 Health Facilities Stocked Out"/>
+
+                        </RelativeLayout>
+
+                    </RelativeLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </RelativeLayout>
+
+
+            <!-- Section for graph for facility stocked out -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:id="@+id/rt_gph_facility_stock_out"
+                android:layout_margin="10dp"
+                android:layout_below="@+id/rt_rpt_rate"
+                android:layout_height="wrap_content">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:id="@+id/crd_gph_facility_stock_out"
+                    app:cardCornerRadius="5dp"
+                    android:layout_margin="5dp"
+                    android:layout_height="wrap_content">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_weight="2"
+                        android:layout_height="wrap_content">
+
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_centerInParent="true"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:id="@+id/txtTitle"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                android:textColor="@color/black"
+                                android:layout_height="wrap_content"
+                                android:text="Number of Facilities Stocked Out"
+                                android:gravity="center"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:id="@+id/txtNm"
+                                android:layout_below="@+id/txtTitle"
+                                android:textColor="@color/black"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="Adults (2019W35)"/>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_below="@+id/txtNm"
+                                android:layout_height="250dp">
+
+                                <com.github.mikephil.charting.charts.BarChart
+                                    android:id="@+id/chart"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent" />
+
+
+
+                            </RelativeLayout>
+
+                        </RelativeLayout>
+
+                    </RelativeLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </RelativeLayout>
+
+            <!-- Section for graph for stocked out Distribution Rates -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:id="@+id/rt_gph_stock_out_d"
+                android:layout_margin="10dp"
+                android:layout_below="@+id/rt_rpt_rate"
+                android:layout_height="wrap_content">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:id="@+id/crd_gph_stock_out_d"
+                    app:cardCornerRadius="5dp"
+                    android:layout_margin="5dp"
+                    android:layout_height="wrap_content">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_weight="2"
+                        android:layout_height="wrap_content">
+
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_centerInParent="true"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:id="@+id/txtTitle_d"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                android:textColor="@color/black"
+                                android:layout_height="wrap_content"
+                                android:text="Stocked Out Distribution Rates (%)"
+                                android:gravity="center"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:id="@+id/txtNm_d"
+                                android:layout_below="@+id/txtTitle_d"
+                                android:textColor="@color/black"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="Adults (2019W35)"/>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_below="@+id/txtNm_d"
+                                android:layout_height="300dp">
+                                <com.anychart.AnyChartView
+                                    android:id="@+id/any_chart_view"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    />
+
+                                <ProgressBar
+                                    android:id="@+id/progress_bar"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    />
+
+                            </RelativeLayout>
+
+                        </RelativeLayout>
+
+                    </RelativeLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </RelativeLayout>
+
+            <!-- Section for graph for HIV commodity stockout rate -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:id="@+id/rt_gph_commodity_stk_rates"
+                android:layout_margin="10dp"
+                android:layout_below="@+id/rt_rpt_rate"
+                android:layout_height="wrap_content">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:id="@+id/crd_gph_commodity_stk_rates"
+                    app:cardCornerRadius="5dp"
+                    android:layout_margin="5dp"
+                    android:layout_height="wrap_content">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_weight="2"
+                        android:layout_height="wrap_content">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_centerInParent="true"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:id="@+id/txtTitle_commodity_skt"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                android:textColor="@color/black"
+                                android:layout_height="wrap_content"
+                                android:text="HIV Commodity Stockout rates - Last 12 Weeks (Uganda)"
+                                android:gravity="center"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:id="@+id/txtNm_cmdty_skt"
+                                android:layout_below="@+id/txtTitle_commodity_skt"
+                                android:textColor="@color/black"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="Health Facility Reporting HIV Commodity Stockstatus during the reporting period"/>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_below="@+id/txtNm_cmdty_skt"
+                                android:clickable="false"
+                                android:layout_height="250dp">
+
+                                <com.github.mikephil.charting.charts.CombinedChart
+                                    android:id="@+id/chart1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"/>
+                            </RelativeLayout>
+
+                        </RelativeLayout>
+
+                    </RelativeLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </RelativeLayout>
+
+
+            <!-- Section for stock status [HIV Commodities] - Number of facilities -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:id="@+id/rt_tb_stk_status"
+                android:layout_margin="10dp"
+                android:visibility="gone"
+                android:layout_below="@+id/rt_gph_commodity_stk_rates"
+                android:layout_height="wrap_content">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:id="@+id/crd_tb_stk_status"
+                    app:cardCornerRadius="5dp"
+                    android:layout_margin="5dp"
+                    android:layout_height="wrap_content">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_weight="2"
+                        android:layout_height="wrap_content">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_centerInParent="true"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:id="@+id/txtTitle_tb_stk_status"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                android:textColor="@color/black"
+                                android:layout_height="wrap_content"
+                                android:text="Stock Status [HIV Commodities] - Number Of Facilities"
+                                android:gravity="center"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:id="@+id/txtNm_tb_stk_status"
+                                android:layout_below="@+id/txtTitle_tb_stk_status"
+                                android:textColor="@color/black"
+                                android:visibility="gone"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="Health Facility Reporting HIV Commodity Stockstatus during the reporting period"/>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_below="@+id/txtNm_tb_stk_status"
+                                android:layout_marginTop="5dp"
+                                android:layout_height="100dp">
+                                <LinearLayout
+                                    android:id = "@+id/relativeLayout1"
+                                    android:layout_width = "fill_parent"
+                                    android:orientation="horizontal"
+                                    android:layout_height = "wrap_content"
+                                    android:background = "@color/black" >
+
+                                    <TextView
+                                        android:layout_width = "0dp"
+                                        android:layout_height = "wrap_content"
+                                        android:layout_weight = "1.5"
+                                        android:gravity = "center"
+                                        android:padding = "5dp"
+                                        android:text = "Commodities"
+                                        android:textColor = "#ffffff" />
+
+                                    <TextView
+                                        android:layout_width = "0dp"
+                                        android:layout_height = "wrap_content"
+                                        android:layout_weight = "1"
+                                        android:gravity = "center"
+                                        android:padding = "5dp"
+                                        android:text = "Category"
+                                        android:textColor = "#ffffff" />
+
+                                    <TextView
+                                        android:layout_width = "0dp"
+                                        android:layout_height = "wrap_content"
+                                        android:layout_weight = "1"
+                                        android:gravity = "center"
+                                        android:padding = "5dp"
+                                        android:text = "#Under"
+                                        android:textColor = "#ffffff" />
+
+                                    <TextView
+                                        android:layout_width = "0dp"
+                                        android:layout_height = "wrap_content"
+                                        android:layout_weight = "1"
+                                        android:gravity = "center"
+                                        android:padding = "5dp"
+                                        android:text = "#Adequate"
+                                        android:textColor = "#ffffff" />
+
+
+                                    <TextView
+                                        android:layout_width = "0dp"
+                                        android:layout_height = "wrap_content"
+                                        android:layout_weight = "1"
+                                        android:gravity = "center"
+                                        android:padding = "5dp"
+                                        android:text = "#Over"
+                                        android:textColor = "#ffffff" />
+
+
+                                    <TextView
+                                        android:layout_width = "0dp"
+                                        android:layout_height = "wrap_content"
+                                        android:layout_weight = "1"
+                                        android:gravity = "center"
+                                        android:padding = "5dp"
+                                        android:text = "#Stockouts"
+                                        android:textColor = "#ffffff" />
+
+
+                                    <TextView
+                                        android:layout_width = "0dp"
+                                        android:layout_height = "wrap_content"
+                                        android:layout_weight = "1"
+                                        android:gravity = "center"
+                                        android:padding = "5dp"
+                                        android:text = "#Clients"
+                                        android:textColor = "#ffffff" />
+                                    <TextView
+                                        android:layout_width = "0dp"
+                                        android:layout_height = "wrap_content"
+                                        android:layout_weight = "1"
+                                        android:gravity = "center"
+                                        android:padding = "5dp"
+                                        android:text = "#Clients at Risk"
+                                        android:textColor = "#ffffff" />
+                                </LinearLayout>
+
+                                <ListView
+                                    android:id = "@+id/listview"
+                                    android:layout_width = "match_parent"
+                                    android:layout_height = "wrap_content"
+                                    android:divider = "@null" />
+
+
+
+                            </RelativeLayout>
+
+                        </RelativeLayout>
+
+                    </RelativeLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </RelativeLayout>
+
+
+
+        </TableLayout>
+    </ScrollView>
+
+
+</RelativeLayout>

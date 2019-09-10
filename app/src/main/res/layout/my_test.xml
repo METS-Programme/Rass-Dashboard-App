@@ -1,0 +1,93 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:orientation="horizontal"
+android:layout_width = "fill_parent"
+android:layout_height = "wrap_content" >
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   android:id = "@+id/relativeLayout1"
+   android:layout_width = "fill_parent"
+   android:layout_height = "wrap_content"
+   android:background = "@color/black" >
+
+<TextView
+    android:layout_width = "0dp"
+    android:layout_height = "wrap_content"
+    android:layout_weight = "1.5"
+    android:gravity = "center"
+    android:padding = "5dp"
+    android:text = "Commodities"
+    android:textColor = "#ffffff" />
+
+<TextView
+    android:layout_width = "0dp"
+    android:layout_height = "wrap_content"
+    android:layout_weight = "1"
+    android:gravity = "center"
+    android:padding = "5dp"
+    android:text = "Category"
+    android:textColor = "#ffffff" />
+
+<TextView
+    android:layout_width = "0dp"
+    android:layout_height = "wrap_content"
+    android:layout_weight = "1"
+    android:gravity = "center"
+    android:padding = "5dp"
+    android:text = "#Under"
+    android:textColor = "#ffffff" />
+
+<TextView
+    android:layout_width = "0dp"
+    android:layout_height = "wrap_content"
+    android:layout_weight = "1"
+    android:gravity = "center"
+    android:padding = "5dp"
+    android:text = "#Adequate"
+    android:textColor = "#ffffff" />
+
+
+    <TextView
+        android:layout_width = "0dp"
+        android:layout_height = "wrap_content"
+        android:layout_weight = "1"
+        android:gravity = "center"
+        android:padding = "5dp"
+        android:text = "#Over"
+        android:textColor = "#ffffff" />
+
+
+    <TextView
+        android:layout_width = "0dp"
+        android:layout_height = "wrap_content"
+        android:layout_weight = "1"
+        android:gravity = "center"
+        android:padding = "5dp"
+        android:text = "#Stockouts"
+        android:textColor = "#ffffff" />
+
+
+    <TextView
+        android:layout_width = "0dp"
+        android:layout_height = "wrap_content"
+        android:layout_weight = "1"
+        android:gravity = "center"
+        android:padding = "5dp"
+        android:text = "#Clients"
+        android:textColor = "#ffffff" />
+    <TextView
+        android:layout_width = "0dp"
+        android:layout_height = "wrap_content"
+        android:layout_weight = "1"
+        android:gravity = "center"
+        android:padding = "5dp"
+        android:text = "#Clients at Risk"
+        android:textColor = "#ffffff" />
+</LinearLayout>
+
+    <ListView
+    android:id = "@+id/listview"
+    android:layout_width = "match_parent"
+    android:layout_height = "wrap_content"
+    android:divider = "@null" />
+
+</LinearLayout>
