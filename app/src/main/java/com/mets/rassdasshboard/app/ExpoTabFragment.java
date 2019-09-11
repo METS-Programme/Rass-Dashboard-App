@@ -72,25 +72,29 @@ public class ExpoTabFragment extends Fragment {
     ArrayList<Entry> StockoutRates = new ArrayList<>();
     ArrayList<BarEntry> ClientRisk = new ArrayList<>();
 
+    Map map;
+    AnyChartView anyChartView;
+    List<DataEntry> data = new ArrayList<>();
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.expo_tab_layout,null);
         initView(rootView);
-        Bundle bundle = getArguments();
-        if(bundle!= null)
-        {
-            myvalue1 = getArguments().getString("SelectValue_OrgUnit");
-            myvalue2 = getArguments().getString("SelectValue_Entity");
-            myvalue3 = getArguments().getString("SelectValue_Period");
-            Log.e("here data",""+myvalue1);
-        }/*else
-        {
-            myvalue1 = "National";
-            myvalue2 = "Uganda";
-            myvalue3 = "2019W37";
 
-        }*/
+        Bundle bundle = getArguments();
+        if(bundle!= null) {
+            if (bundle.getString("SelectValue_OrgUnit")!=null && bundle.getString("SelectValue_Entity")!=null && bundle.getString("SelectValue_Period")!=null) {
+                myvalue1 = getArguments().getString("SelectValue_OrgUnit");
+                myvalue2 = getArguments().getString("SelectValue_Entity");
+                myvalue3 = getArguments().getString("SelectValue_Period");
+                Log.e("here data", "" + myvalue1);
+            }else{
+                myvalue1 = "National";
+                myvalue2 = "Uganda";
+                myvalue3 = "2019W32";
+            }
+        }
         getRTKsData(myvalue1,myvalue2,myvalue3);
         return rootView;
     }
@@ -116,19 +120,48 @@ public class ExpoTabFragment extends Fragment {
 
 
         // Any graph code here
-
-        AnyChartView anyChartView = view.findViewById(R.id.any_chart_view);
+        anyChartView = view.findViewById(R.id.any_chart_view);
         anyChartView.setProgressBar(view.findViewById(R.id.progress_bar));
-        Map map = AnyChart.map();
+        map = AnyChart.map();
+        //Choropleth series = map.choropleth(getData());
         map.geoData("anychart.maps.uganda");
-        //map.geoData("anychart.maps.united_states_of_america");
-
         map.interactivity().selectionMode(SelectionMode.NONE);
         map.padding(0, 0, 0, 0);
-        //Choropleth series = map.choropleth(getData());
-        Choropleth series = map.choropleth(getData());
+
+        /*data.add(new ExpoTabFragment.CustomDataEntry("Abim", "Abim District", 38.4));
+        data.add(new ExpoTabFragment.CustomDataEntry("Agago", "Agago District", 70.8));
+        data.add(new ExpoTabFragment.CustomDataEntry("Bukedea", "Bukedea District", 10));
+        data.add(new ExpoTabFragment.CustomDataEntry("Kalangala", "Kalangala District", 90.0));
+        data.add(new ExpoTabFragment.CustomDataEntry("Busia", "Busia District", 20.8));
+        data.add(new ExpoTabFragment.CustomDataEntry("Butambala", "Butambala District", 15.0));
+        data.add(new ExpoTabFragment.CustomDataEntry("Ibanda", "Ibanda District", 10.8));
+        data.add(new ExpoTabFragment.CustomDataEntry("Amuru", "Amuru District", 5.0));
+        data.add(new ExpoTabFragment.CustomDataEntry("Amudat", "Amudat District", 30.8));
+        data.add(new ExpoTabFragment.CustomDataEntry("Dokolo", "Dokolo District", 25.8));*/
+
+
+        data.add(new ExpoTabFragment.CustomDataEntry("Adjumani", "Adjumani District", 38.4));
+        data.add(new ExpoTabFragment.CustomDataEntry("Alebtong", "Alebtong District", 70.8));
+        data.add(new ExpoTabFragment.CustomDataEntry("Amolatar", "Amolatar District", 10));
+        data.add(new ExpoTabFragment.CustomDataEntry("Amuria", "Amuria District", 90.0));
+        data.add(new ExpoTabFragment.CustomDataEntry("Apac", "Apac District", 20.8));
+        data.add(new ExpoTabFragment.CustomDataEntry("Arua", "Arua District", 15.0));
+        data.add(new ExpoTabFragment.CustomDataEntry("Budaka", "Budaka District", 10.8));
+        data.add(new ExpoTabFragment.CustomDataEntry("Bududa", "Bududa District", 5.0));
+        data.add(new ExpoTabFragment.CustomDataEntry("Bugiri", "Bugiri District", 30.8));
+
+
+        data.add(new ExpoTabFragment.CustomDataEntry("Buhweju", "Buhweju District", 25.8));
+        data.add(new ExpoTabFragment.CustomDataEntry("Buikwe", "Buikwe District", 10));
+        data.add(new ExpoTabFragment.CustomDataEntry("Bukomansimbi", "Bukomansimbi District", 90.0));
+        data.add(new ExpoTabFragment.CustomDataEntry("Bukwo", "Bukwo District", 20.8));
+        data.add(new ExpoTabFragment.CustomDataEntry("Bulambuli", "Bulambuli District", 15.0));
+        data.add(new ExpoTabFragment.CustomDataEntry("Buliisa", "Buliisa District", 10.8));
+        data.add(new ExpoTabFragment.CustomDataEntry("Bundibugyo", "Bundibugyo District", 5.0));
+
+        Choropleth series = map.choropleth(data);
         LinearColor linearColor = LinearColor.instantiate();
-        linearColor.colors(new String[]{ "#c2e9fb", "#81d4fa", "#01579b", "#002746"});
+        linearColor.colors(new String[]{ "#ADFF2F", "#FFFF00", "#FF0000", "#bf0000"});
         series.colorScale(linearColor);
         series.hovered()
                 .fill("#f48fb1")
@@ -143,18 +176,14 @@ public class ExpoTabFragment extends Fragment {
         series.tooltip()
                 .useHtml(true)
                 .format("function() {\n" +
-                        "            return '<span style=\"font-size: 13px\">' + this.value + ' litres per capita</span>';\n" +
+                        "            return '<span style=\"font-size: 13px\">' + this.value + ' %</span>';\n" +
                         "          }");
 
 
 
         anyChartView.addScript("file:///android_asset/uganda.js");
-        //anyChartView.addScript("file:///android_asset/united_states_of_america.js");
-        //anyChartView.addScript("file:///android_asset/proj4.js");
+        anyChartView.addScript("file:///android_asset/proj4.js");
         anyChartView.setChart(map);
-
-
-
     }
 
 
@@ -206,64 +235,6 @@ public class ExpoTabFragment extends Fragment {
 
 
     // function for any chart view static
-    private List<DataEntry> getData() {
-        List<DataEntry> data = new ArrayList<>();
-
-        data.add(new ExpoTabFragment.CustomDataEntry("US.MN", "Minnesota", 8.4));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.MT", "Montana", 8.5));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.ND", "North Dakota", 5.1));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.ID", "Idaho", 8));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.WA", "Washington", 13.1));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.AZ", "Arizona", 9.7));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.CA", "California", 14));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.CO", "Colorado", 8.7));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.NV", "Nevada", 14.7));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.NM", "New Mexico", 6.9));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.OR", "Oregon", 12.2));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.UT", "Utah", 3.2));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.WY", "Wyoming", 5.2));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.AR", "Arkansas", 4.2));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.IA", "Iowa", 4.7));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.KS", "Kansas", 3.2));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.MO", "Missouri", 7.2));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.NE", "Nebraska", 5));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.OK", "Oklahoma", 4.5));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.SD", "South Dakota", 5));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.LA", "Louisiana", 5.7));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.TX", "Texas", 5));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.CT", "Connecticut", 14.4, new ExpoTabFragment.LabelDataEntry(false)));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.MA", "Massachusetts", 16.9, new ExpoTabFragment.LabelDataEntry(false)));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.NH", "New Hampshire", 19.6));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.RI", "Rhode Island", 14, new ExpoTabFragment.LabelDataEntry(false)));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.VT", "Vermont", 17.5));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.AL", "Alabama", 6));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.FL", "Florida", 12.4));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.GA", "Georgia", 5.9));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.MS", "Mississippi", 2.8));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.SC", "South Carolina", 6.1));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.IL", "Illinois", 10.2));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.IN", "Indiana", 6.1));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.KY", "Kentucky", 3.9));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.NC", "North Carolina", 6.6));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.OH", "Ohio", 7.2));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.TN", "Tennessee", 5.4));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.VA", "Virginia", 10.7));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.WI", "Wisconsin", 9.1));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.WY", "Wyoming", 5.2, new ExpoTabFragment.LabelDataEntry(false)));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.WV", "West Virginia", 2.4));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.DE", "Delaware", 13.5, new ExpoTabFragment.LabelDataEntry(false)));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.DC", "District of Columbia", 25.7, new ExpoTabFragment.LabelDataEntry(false)));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.MD", "Maryland", 8.9, new ExpoTabFragment.LabelDataEntry(false)));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.NJ", "New Jersey", 14.9, new ExpoTabFragment.LabelDataEntry(false)));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.NY", "New York", 11.9));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.PA", "Pennsylvania", 5.6));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.ME", "Maine", 10.4));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.HI", "Hawaii", 13.1));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.AK", "Alaska", 10.9));
-        data.add(new ExpoTabFragment.CustomDataEntry("US.MI", "Michigan", 7.6));
-
-        return data;
-    }
     class CustomDataEntry extends DataEntry {
         public CustomDataEntry(String id, String name, Number value) {
             setValue("id", id);
