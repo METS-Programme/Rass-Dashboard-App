@@ -57,6 +57,16 @@
                                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                                 android:layout_height="wrap_content"
                                 android:text="0%"/>
+
+                            <ImageView
+                                android:layout_width="10dp"
+                                android:layout_margin="10dp"
+                                android:id="@+id/img"
+                                android:src="@drawable/up_arrow_red"
+                                android:layout_below="@+id/txtName"
+                                android:layout_toRightOf="@+id/txtphone"
+                                android:layout_height="10dp" />
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:id="@+id/txtdetails"
@@ -115,6 +125,14 @@
                                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                                 android:layout_height="wrap_content"
                                 android:text="0%"/>
+                            <ImageView
+                                android:layout_width="10dp"
+                                android:layout_margin="10dp"
+                                android:id="@+id/img1"
+                                android:src="@drawable/down_arrow_green"
+                                android:layout_below="@+id/txtNamerpt"
+                                android:layout_toRightOf="@+id/txtpercentagerpt"
+                                android:layout_height="10dp" />
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:id="@+id/txtdetailsrpt"
@@ -188,7 +206,15 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent" />
 
-
+                                <ProgressBar
+                                    android:id="@+id/progress_barg"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    />
 
                             </RelativeLayout>
 

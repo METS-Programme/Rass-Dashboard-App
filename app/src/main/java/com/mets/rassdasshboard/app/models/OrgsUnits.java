@@ -13,13 +13,23 @@ public class OrgsUnits {
         this.item_name = item_name;
     }
 
-    public List<orgUnit_> getEntities() {
-        return entities;
+    public String getItem_id() {
+        return item_id;
     }
 
-    public void setEntities(List<orgUnit_> sampls) {
-        this.entities = entities;
+    public void setItem_id(String item_id) {
+        this.item_id = item_id;
     }
 
-    List<orgUnit_> entities;
+    String item_id;
+
+    public List<referenceLabTests> getSampls() {
+        return sampls;
+    }
+
+    public void setSampls(List<referenceLabTests> sampls) {
+        this.sampls = sampls;
+    }
+
+    List<referenceLabTests> sampls;
 }

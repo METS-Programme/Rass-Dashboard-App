@@ -2,11 +2,16 @@ package com.mets.rassdasshboard.app;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,10 +19,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.anychart.AnyChart;
@@ -45,13 +54,19 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import com.anychart.charts.Map;
+import com.github.mikephil.charting.utils.EntryXComparator;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.mets.rassdasshboard.app.models.AdultsModel;
+import com.mets.rassdasshboard.app.services.AdultsDistrictMap;
 import com.mets.rassdasshboard.app.services.CombComdtySTKA;
 import com.mets.rassdasshboard.app.services.GetAllData;
+import com.mets.rassdasshboard.app.services.RTKAStockOutBarRegional;
 import com.mets.rassdasshboard.app.services.STKAMapData;
 import com.mets.rassdasshboard.app.services.STKAStockOutBar;
+import com.mets.rassdasshboard.app.services.STKAStockOutBarDist;
+import com.mets.rassdasshboard.app.services.STKAStockOutBarRegional;
+import com.mets.rassdasshboard.app.services.STKCSingleMapData;
 import com.mets.rassdasshboard.app.services.getCurrentWeek;
 
 import org.json.JSONArray;
@@ -60,6 +75,7 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class LifeStyleTabFragment extends Fragment  {
@@ -67,11 +83,16 @@ public class LifeStyleTabFragment extends Fragment  {
     ProgressDialog dialog;
     GetAllData mGetAllData;
     STKAStockOutBar mSTKAStockOutBar;
+    AdultsDistrictMap mAdultsDistrictMap;
+    STKAStockOutBarDist mSTKAStockOutBarDist;
     STKAMapData mSTKAMapData;
     CombComdtySTKA mCombComdtySTKA;
     getCurrentWeek mgetCurrentWeek;
+    STKAStockOutBarRegional mSTKAStockOutBarRegional;
 
-    TextView txtpag,txtPg, txtName, txtRptrate, txtRptPg, txtRptDls, txtAdultsNm,txtTNm_d;
+    STKCSingleMapData mSTKCSingleMapData;
+
+    TextView txtpag,txtPg, txtName, txtRptrate, txtRptPg, txtRptDls, txtAdultsNm,txtTNm_d, TxtTitle_commodity_skt;
 
     ArrayList<BarEntry> barEntries = new ArrayList<>();
     ArrayList<BarEntry> barEntries1 = new ArrayList<>();
@@ -83,17 +104,17 @@ public class LifeStyleTabFragment extends Fragment  {
     ArrayList<BarEntry> ClientRisk = new ArrayList<>();
 
     BarChart barChart;
+    ProgressBar barProg;
     Map map;
     AnyChartView anyChartView;
-    List<DataEntry> data = new ArrayList<>();
 
-
+    List<DataEntry> MapData = new ArrayList<>();
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.lifestyle_tab_layout,null);
-        initView(rootView);
+
 
         Bundle bundle = getArguments();
         if(bundle!= null) {
@@ -105,12 +126,36 @@ public class LifeStyleTabFragment extends Fragment  {
             }else{
                 myvalue1 = "National";
                 myvalue2 = "Uganda";
-                myvalue3 = "2019W32";
+                myvalue3 = "2019W34";
             }
         }
 
-        getAdultsData(myvalue1,myvalue2,myvalue3);
+        initView(rootView);
+        //detect internet and show the data
+        if(isNetworkStatusAvialable (getActivity())) {
+            //Toast.makeText(getActivity(), "Internet detected", Toast.LENGTH_SHORT).show();
+            getAdultsData(myvalue1,myvalue2,myvalue3);
+        } else {
+           // Toast.makeText(getActivity(), "Please check your Internet Connection", Toast.LENGTH_LONG).show();
 
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            final ViewGroup viewGroup = rootView.findViewById(android.R.id.content);
+            View dialogView = LayoutInflater.from(rootView.getContext()).inflate(R.layout.custom_dialog, viewGroup, false);
+            builder.setView(dialogView);
+            final AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+            dialogView.findViewById(R.id.connect).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //your business logic
+                    getAdultsData(myvalue1,myvalue2,myvalue3);
+                    alertDialog.dismiss();
+
+                }
+            });
+
+
+        }
         return rootView;
     }
 
@@ -127,55 +172,31 @@ public class LifeStyleTabFragment extends Fragment  {
 
         txtAdultsNm = (TextView) view.findViewById(R.id.txtNm);
         txtTNm_d = (TextView) view.findViewById(R.id.txtNm_d);
+        TxtTitle_commodity_skt = (TextView)view.findViewById(R.id.txtTitle_commodity_skt) ;
 
         // combined graph code starts here
         mChart = (CombinedChart) view.findViewById(R.id.chart1);
-
+        barProg = (ProgressBar)view.findViewById(R.id.progress_barg);
         /// drawing abar chart grap strt here
         barChart = (BarChart)view.findViewById(R.id.chart);
         barChart.setHighlightFullBarEnabled(false);
 
+
+
         // Any graph code here
         anyChartView = view.findViewById(R.id.any_chart_view);
         anyChartView.setProgressBar(view.findViewById(R.id.progress_bar));
+       // map = AnyChart.map();
+
+        //data.add(new CustomDataEntry("US.MN", "Minnesota", 8.4));
+        MapData.add(new CustomDataEntry("","",0.0));
         map = AnyChart.map();
         //Choropleth series = map.choropleth(getData());
         map.geoData("anychart.maps.uganda");
         map.interactivity().selectionMode(SelectionMode.NONE);
         map.padding(0, 0, 0, 0);
 
-        data.add(new CustomDataEntry("Abim", "Abim District", 38.4));
-        data.add(new CustomDataEntry("Agago", "Agago District", 70.8));
-        data.add(new CustomDataEntry("Bukedea", "Bukedea District", 10));
-        data.add(new CustomDataEntry("Kalangala", "Kalangala District", 90.0));
-        data.add(new CustomDataEntry("Busia", "Busia District", 20.8));
-        data.add(new CustomDataEntry("Butambala", "Butambala District", 15.0));
-        data.add(new CustomDataEntry("Ibanda", "Ibanda District", 10.8));
-        data.add(new CustomDataEntry("Amuru", "Amuru District", 5.0));
-        data.add(new CustomDataEntry("Amudat", "Amudat District", 30.8));
-        data.add(new CustomDataEntry("Dokolo", "Dokolo District", 25.8));
-
-
-        data.add(new CustomDataEntry("Adjumani", "Adjumani District", 38.4));
-        data.add(new CustomDataEntry("Alebtong", "Alebtong District", 70.8));
-        data.add(new CustomDataEntry("Amolatar", "Amolatar District", 10));
-        data.add(new CustomDataEntry("Amuria", "Amuria District", 90.0));
-        data.add(new CustomDataEntry("Apac", "Apac District", 20.8));
-        data.add(new CustomDataEntry("Arua", "Arua District", 15.0));
-        data.add(new CustomDataEntry("Budaka", "Budaka District", 10.8));
-        data.add(new CustomDataEntry("Bududa", "Bududa District", 5.0));
-        data.add(new CustomDataEntry("Bugiri", "Bugiri District", 30.8));
-
-
-        data.add(new CustomDataEntry("Buhweju", "Buhweju District", 25.8));
-        data.add(new CustomDataEntry("Buikwe", "Buikwe District", 10));
-        data.add(new CustomDataEntry("Bukomansimbi", "Bukomansimbi District", 90.0));
-        data.add(new CustomDataEntry("Bukwo", "Bukwo District", 20.8));
-        data.add(new CustomDataEntry("Bulambuli", "Bulambuli District", 15.0));
-        data.add(new CustomDataEntry("Buliisa", "Buliisa District", 10.8));
-        data.add(new CustomDataEntry("Bundibugyo", "Bundibugyo District", 5.0));
-
-        Choropleth series = map.choropleth(data);
+        Choropleth series = map.choropleth(MapData);
         LinearColor linearColor = LinearColor.instantiate();
         linearColor.colors(new String[]{ "#ADFF2F", "#FFFF00", "#FF0000", "#bf0000"});
         series.colorScale(linearColor);
@@ -195,12 +216,11 @@ public class LifeStyleTabFragment extends Fragment  {
                         "            return '<span style=\"font-size: 13px\">' + this.value + ' %</span>';\n" +
                         "          }");
 
-
-
         anyChartView.addScript("file:///android_asset/uganda.js");
         anyChartView.addScript("file:///android_asset/proj4.js");
         anyChartView.setChart(map);
     }
+
 
     private LineData generateLineData() {
 
@@ -248,28 +268,19 @@ public class LifeStyleTabFragment extends Fragment  {
         return d;
     }
 
-    // function for any chart view static
-    private List<DataEntry> getData() {
-        List<DataEntry> data = new ArrayList<>();
-
-        data.add(new CustomDataEntry("US.MN", "Minnesota", 8.4));
-        return data;
-    }
-
     class CustomDataEntry extends DataEntry {
         public CustomDataEntry(String id, String name, Number value) {
             setValue("id", id);
             setValue("name", name);
             setValue("value", value);
         }
-        public CustomDataEntry(String id, String name, Double value) {
+        public CustomDataEntry(String id, String name, Double value, LifeStyleTabFragment.LabelDataEntry label) {
             setValue("id", id);
             setValue("name", name);
             setValue("value", value);
-           // setValue("label", label);
+            setValue("label", label);
         }
     }
-
     class LabelDataEntry extends DataEntry {
         LabelDataEntry(Boolean enabled) {
             setValue("enabled", enabled);
@@ -293,6 +304,7 @@ public class LifeStyleTabFragment extends Fragment  {
                                 final String Enty = obj.getJSONArray("results").getJSONObject(0).getString("entity");
                                 final String Wk = obj.getJSONArray("results").getJSONObject(0).getString("week");
                                 final String rptStock_out = obj.getJSONArray("results").getJSONObject(0).getString("rso");
+                                final String mlevel = obj.getJSONArray("results").getJSONObject(0).getString("level");
 
                                 // my parameters for the combined graph are defined here
                                 final String mUid = obj.getJSONArray("results").getJSONObject(0).getString("uid");
@@ -324,8 +336,24 @@ public class LifeStyleTabFragment extends Fragment  {
                                 txtAdultsNm.setText("Adults"+" "+"("+Wk+")");
                                 txtTNm_d.setText("Adults"+" "+"("+Wk+")");
 
-                                getAdultsGraphData("Regional",Wk);
-                                getAdultsMapData("District",Wk);
+                                TxtTitle_commodity_skt.setText("HIV Commodity Stockout rates - Last 12 Weeks"+" "+"("+Enty+")");
+                                // check for selection
+                                if (myvalue1.equalsIgnoreCase("National")){
+                                   // this shows REgional Uganda graph data for every graph
+                                    getAdultsGraphData("Regional",Wk);
+                                    getAdultsMapData("District",Wk);
+                                }else if (myvalue1.equalsIgnoreCase("Regional")){
+                                    // this shows all Regional data for every graph
+                                    getAdults_GraphData(myvalue2, Wk);
+                                    getRegionalDistrictDataSTKA(myvalue2,Wk);
+
+
+                                }else if (myvalue1.equalsIgnoreCase("District")){
+                                    // this shows all District data for every graph
+                                    getAdultsDistGraphData("District",Wk,myvalue2);
+                                    //getAdults_GraphData("District", Wk, myvalue2);
+                                    getSTKCSelectedMapData("District",Wk,myvalue2);
+                                }
                                 getAdultsCommodSTKA(mUid,mYear,mWeekNo);
 
                             }
@@ -343,6 +371,18 @@ public class LifeStyleTabFragment extends Fragment  {
                             dialog.dismiss();
                         }
                     }
+                }else {
+                    AlertDialog.Builder localBuilder1 = new AlertDialog.Builder(getActivity());
+                    localBuilder1.setMessage("Failed, check your internet connection")
+                            .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface paramAnonymousDialogInterface, int paramAnonymousInt) {
+                                    getAdultsData(myvalue1,myvalue2,myvalue3);
+                                }
+                            }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface paramAnonymousDialogInterface, int paramAnonymousInt) {
+                            getActivity().finish();
+                        }
+                    });
                 }
             }
             @Override
@@ -362,7 +402,7 @@ public class LifeStyleTabFragment extends Fragment  {
         mSTKAStockOutBar = new STKAStockOutBar() {
             @Override
             protected void onPostExecute(String results) {
-                dialog.dismiss();
+                //dialog.dismiss();
                 if (!results.equalsIgnoreCase("error")) {
                     try {
                         JSONObject obj = new JSONObject(results);
@@ -376,24 +416,120 @@ public class LifeStyleTabFragment extends Fragment  {
 
                             for(int i= 0; i< res.length();i++){
                                 JSONArray array = res.getJSONArray(i);
-                                barEntries.add(new BarEntry(i+1, array.getInt(0)));
+                                barEntries.add(new BarEntry(i+1, array.getInt(1)));
+                                barEntries1.add(new BarEntry(i+1, (float) array.getDouble(2)));
+                                months[i] = array.getString(3);
+
+                            }
+
+
+                            BarDataSet barDataSet = new BarDataSet(barEntries,"Stockouts");
+                            Collections.sort(barEntries, new EntryXComparator());
+                            barDataSet.setColor(Color.parseColor("#7CB5EC"));
+                            BarDataSet barDataSet1 = new BarDataSet(barEntries1,"Clients at risk(*100)");
+                            barDataSet1.setColors(Color.parseColor("#000000"));
+                            Collections.sort(barEntries1, new EntryXComparator());
+
+                            barProg.setVisibility(View.GONE);
+                            BarData data = new BarData(barDataSet,barDataSet1);
+                            barChart.setData(data);
+
+                            barProg.setVisibility(View.GONE);
+
+                            XAxis xAxisB = barChart.getXAxis();
+                            xAxisB.setValueFormatter(new IndexAxisValueFormatter(months));
+                            barChart.getAxisLeft().setAxisMinimum(0);
+                            xAxisB.setPosition(XAxis.XAxisPosition.BOTTOM);
+
+                            xAxisB.setGranularity(1);
+                            xAxisB.setLabelRotationAngle(45);
+                            xAxisB.setCenterAxisLabels(true);
+                            xAxisB.setGranularityEnabled(true);
+
+                            barChart.setFitBars(true);
+
+                            float barSpace = 0.01f;
+                            float groupSpace = 0.1f;
+                            int groupCount = 12;
+
+                            //IMPORTANT *****
+                            data.setBarWidth(0.15f);
+                            barChart.getXAxis().setAxisMinimum(0);
+                            barChart.getXAxis().setAxisMaximum(0 + barChart.getBarData().getGroupWidth(groupSpace, barSpace) * groupCount);
+                            barChart.groupBars(0, groupSpace, barSpace); // perform the "explicit" grouping
+                            //***** IMPORTANT
+
+                            Log.e("here GraphData 2", ""+res.length());
+
+
+
+                        }else{
+                            Toast.makeText(getActivity(), "message failed!", Toast.LENGTH_SHORT).show();
+                            if(dialog.isShowing()){
+                                dialog.dismiss();
+                            }
+                        }
+                    } catch (JSONException localJSONException) {
+                        Log.e("gettingjson", localJSONException.toString());
+                        localJSONException.printStackTrace();
+                        if(dialog.isShowing()){
+                            dialog.dismiss();
+                        }
+                    }
+                }
+            }
+            @Override
+            protected void onPreExecute()
+            {
+                //dialog = ProgressDialog.show(getActivity(), "", "Loading Data...", true);
+                //dialog.setCancelable(true);
+            }
+
+        };
+        mSTKAStockOutBar.execute(mLevel, mWeek);
+
+    }
+
+    public void getAdultsDistGraphData(final String mLevel,final String mWeek, final String mEntity){
+        mSTKAStockOutBarDist = new STKAStockOutBarDist() {
+            @Override
+            protected void onPostExecute(String results) {
+                //dialog.dismiss();
+                if (!results.equalsIgnoreCase("error")) {
+                    try {
+                        JSONObject obj = new JSONObject(results);
+                        if(obj.getString("status").equalsIgnoreCase("ok")) {
+
+                            Log.e("District GraphData", ""+results);
+
+                            JSONArray res = obj.getJSONArray("results");
+
+                            String[] drugs = new String[res.length()];
+
+                            for(int i= 0; i< res.length();i++){
+                                JSONArray array = res.getJSONArray(i);
+                                barEntries.add(new BarEntry(i+1,    (float) array.getDouble(2)));
                                 barEntries1.add(new BarEntry(i+1, (float) array.getDouble(1)));
-                                months[i] = array.getString(2);
+                                drugs[i] = array.getString(0);
 
                             }
 
 
                             BarDataSet barDataSet = new BarDataSet(barEntries,"Stockouts");
                             barDataSet.setColor(Color.parseColor("#7CB5EC"));
+                            Collections.sort(barEntries, new EntryXComparator());
                             BarDataSet barDataSet1 = new BarDataSet(barEntries1,"Clients at risk(*100)");
                             barDataSet1.setColors(Color.parseColor("#000000"));
+                            Collections.sort(barEntries1, new EntryXComparator());
 
 
                             BarData data = new BarData(barDataSet,barDataSet1);
                             barChart.setData(data);
 
+                            barProg.setVisibility(View.GONE);
+
                             XAxis xAxisB = barChart.getXAxis();
-                            xAxisB.setValueFormatter(new IndexAxisValueFormatter(months));
+                            xAxisB.setValueFormatter(new IndexAxisValueFormatter(drugs));
                             barChart.getAxisLeft().setAxisMinimum(0);
                             xAxisB.setPosition(XAxis.XAxisPosition.BOTTOM);
                             xAxisB.setGranularity(1);
@@ -436,12 +572,12 @@ public class LifeStyleTabFragment extends Fragment  {
             @Override
             protected void onPreExecute()
             {
-                dialog = ProgressDialog.show(getActivity(), "", "Loading Data...", true);
-                dialog.setCancelable(true);
+                //dialog = ProgressDialog.show(getActivity(), "", "Loading Data...", true);
+                //dialog.setCancelable(true);
             }
 
         };
-        mSTKAStockOutBar.execute(mLevel, mWeek);
+        mSTKAStockOutBarDist.execute(mLevel, mWeek,mEntity);
 
     }
 
@@ -450,21 +586,53 @@ public class LifeStyleTabFragment extends Fragment  {
         mSTKAMapData = new STKAMapData() {
             @Override
             protected void onPostExecute(String results) {
-                dialog.dismiss();
+               // dialog.dismiss();
                 if (!results.equalsIgnoreCase("error")) {
                     try {
 
-
                         JSONObject obj = new JSONObject(results);
                         if(obj.getString("status").equalsIgnoreCase("ok")) {
-                            Log.e("here MapData", ""+results);
+
+                            Log.e("District GraphData", ""+results);
                             JSONArray res = obj.getJSONArray("results");
+                            for(int i= 0; i< res.length();i++){
+                                JSONArray array = res.getJSONArray(i);
+                                MapData.add(new LifeStyleTabFragment.CustomDataEntry(array.getString(0), array.getString(3), (float) array.getDouble(1)));
+                            }
+                            map = AnyChart.map();
+                            //Choropleth series = map.choropleth(getData());
+                            map.geoData("anychart.maps.uganda");
+                            map.interactivity().selectionMode(SelectionMode.NONE);
+                            map.padding(0, 0, 0, 0);
+
+                            Choropleth series = map.choropleth(MapData);
+                            LinearColor linearColor = LinearColor.instantiate();
+                            linearColor.colors(new String[]{ "#ADFF2F", "#FFFF00", "#FF0000", "#bf0000"});
+                            series.colorScale(linearColor);
+                            series.hovered()
+                                    .fill("#f48fb1")
+                                    .stroke("#f99fb9");
+                            series.selected()
+                                    .fill("#c2185b")
+                                    .stroke("#c2185b");
+                            series.labels().enabled(true);
+                            series.labels().fontSize(10);
+                            series.labels().fontColor("#212121");
+                            series.labels().format("{%Value}");
+                            series.tooltip()
+                                    .useHtml(true)
+                                    .format("function() {\n" +
+                                            "            return '<span style=\"font-size: 13px\">' + this.value + ' %</span>';\n" +
+                                            "          }");
 
 
 
+                            anyChartView.addScript("file:///android_asset/uganda.js");
+                            anyChartView.addScript("file:///android_asset/proj4.js");
+                            anyChartView.setChart(map);
 
-                            //data.add(new CustomDataEntry("Abim", "Abim District", 38.4));
-                           // anyChartView.setChart(map);
+
+                            Log.e("here GraphData 2", ""+res.length());
 
 
 
@@ -486,8 +654,8 @@ public class LifeStyleTabFragment extends Fragment  {
             @Override
             protected void onPreExecute()
             {
-                /*dialog = ProgressDialog.show(getActivity(), "", "Loading Data...", true);
-                dialog.setCancelable(true);*/
+                //dialog = ProgressDialog.show(getActivity(), "", "Loading Data...", true);
+                //dialog.setCancelable(true);
             }
 
         };
@@ -500,7 +668,7 @@ public class LifeStyleTabFragment extends Fragment  {
         mCombComdtySTKA = new CombComdtySTKA() {
             @Override
             protected void onPostExecute(String results) {
-                dialog.dismiss();
+                //dialog.dismiss();
                 if (!results.equalsIgnoreCase("error")) {
                     try {
                         JSONObject objAdults = new JSONObject(results);
@@ -518,7 +686,9 @@ public class LifeStyleTabFragment extends Fragment  {
                                 weeks[i] = array.getString(0);
 
                             }
-
+                            Collections.sort(ClientRisk, new EntryXComparator());
+                            Collections.sort(StockoutRates, new EntryXComparator());
+                            Collections.sort(ReportingRates, new EntryXComparator());
                             mChart.setDrawGridBackground(true);
                             mChart.setDrawBarShadow(false);
                             mChart.setClickable(false);
@@ -591,8 +761,8 @@ public class LifeStyleTabFragment extends Fragment  {
             @Override
             protected void onPreExecute()
             {
-                /*dialog = ProgressDialog.show(getActivity(), "", "Loading Data...", true);
-                dialog.setCancelable(true);*/
+                //dialog = ProgressDialog.show(getActivity(), "", "Loading Data...", true);
+                //dialog.setCancelable(true);
             }
 
         };
@@ -649,11 +819,369 @@ public class LifeStyleTabFragment extends Fragment  {
 
     }
 
+    // function for generating Regional district graph data
+    public void getAdultsReginGraph(final String mRegion,final String mWeek){
+        mSTKAStockOutBarRegional = new STKAStockOutBarRegional() {
+            @Override
+            protected void onPostExecute(String results) {
+                //dialog.dismiss();
+                if (!results.equalsIgnoreCase("error")) {
+                    try {
+                        JSONObject obj = new JSONObject(results);
+                        if(obj.getString("status").equalsIgnoreCase("ok")) {
+
+                            Log.e("Regional GraphData", ""+results);
+
+                            JSONArray res = obj.getJSONArray("results");
+
+                            String[] Dist = new String[res.length()];
+
+                            for(int i= 0; i< res.length();i++){
+                                JSONArray array = res.getJSONArray(i);
+                                barEntries.add(new BarEntry(i+1,    (float) array.getDouble(0)));
+                                barEntries1.add(new BarEntry(i+1, (float) array.getDouble(1)));
+                                Dist[i] = array.getString(2);
+
+                            }
+
+
+                            BarDataSet barDataSet = new BarDataSet(barEntries,"Stockouts");
+                            barDataSet.setColor(Color.parseColor("#7CB5EC"));
+                            Collections.sort(barEntries, new EntryXComparator());
+                            BarDataSet barDataSet1 = new BarDataSet(barEntries1,"Clients at risk(*100)");
+                            barDataSet1.setColors(Color.parseColor("#000000"));
+                            Collections.sort(barEntries1, new EntryXComparator());
+
+                            BarData data = new BarData(barDataSet,barDataSet1);
+                            barChart.setData(data);
+
+                            barProg.setVisibility(View.GONE);
+
+                            XAxis xAxisB = barChart.getXAxis();
+                            xAxisB.setValueFormatter(new IndexAxisValueFormatter(Dist));
+                            barChart.getAxisLeft().setAxisMinimum(0);
+                            xAxisB.setPosition(XAxis.XAxisPosition.BOTTOM);
+                            xAxisB.setGranularity(1);
+                            xAxisB.setLabelRotationAngle(45);
+                            xAxisB.setCenterAxisLabels(true);
+                            xAxisB.setGranularityEnabled(true);
+
+                            barChart.setFitBars(true);
+
+                            float barSpace = 0.01f;
+                            float groupSpace = 0.1f;
+                            int groupCount = 12;
+
+                            //IMPORTANT *****
+                            data.setBarWidth(0.15f);
+                            barChart.getXAxis().setAxisMinimum(0);
+                            barChart.getXAxis().setAxisMaximum(0 + barChart.getBarData().getGroupWidth(groupSpace, barSpace) * groupCount);
+                            barChart.groupBars(0, groupSpace, barSpace); // perform the "explicit" grouping
+                            //***** IMPORTANT
+
+                            Log.e("Reg Graph", ""+res.length());
+
+
+
+                        }else{
+                            Toast.makeText(getActivity(), "message failed!", Toast.LENGTH_SHORT).show();
+                            if(dialog.isShowing()){
+                                dialog.dismiss();
+                            }
+                        }
+                    } catch (JSONException localJSONException) {
+                        Log.e("gettingjson", localJSONException.toString());
+                        localJSONException.printStackTrace();
+                        if(dialog.isShowing()){
+                            dialog.dismiss();
+                        }
+                    }
+                }
+            }
+            @Override
+            protected void onPreExecute()
+            {
+                //dialog = ProgressDialog.show(getActivity(), "", "Loading Data...", true);
+                //dialog.setCancelable(true);
+            }
+
+        };
+        mSTKAStockOutBarRegional.execute(mRegion, mWeek);
+    }
+
+    //Graph for each district
+    public void getAdults_GraphData(final String mRegion,final String mWeek){
+        mAdultsDistrictMap = new AdultsDistrictMap() {
+            @Override
+            protected void onPostExecute(String results) {
+                //dialog.dismiss();
+                if (!results.equalsIgnoreCase("error")) {
+                    try {
+                        JSONObject obj = new JSONObject(results);
+                        if(obj.getString("status").equalsIgnoreCase("ok")) {
+
+                            Log.e("Single MapData", ""+results);
+
+                            JSONArray res = obj.getJSONArray("results");
+
+                            //String[] drugs = new String[res.length()];
+
+                            for(int i= 0; i< res.length();i++){
+                                JSONArray array = res.getJSONArray(i);
+                                MapData.add(new LifeStyleTabFragment.CustomDataEntry(array.getString(0), array.getString(3), (float) array.getDouble(1)));
+                            }
+                            map = AnyChart.map();
+                            //Choropleth series = map.choropleth(getData());
+                            map.geoData("anychart.maps.uganda");
+                            map.interactivity().selectionMode(SelectionMode.NONE);
+                            map.padding(0, 0, 0, 0);
+
+                            Choropleth series = map.choropleth(MapData);
+                            LinearColor linearColor = LinearColor.instantiate();
+                            linearColor.colors(new String[]{ "#ADFF2F", "#FFFF00", "#FF0000", "#bf0000"});
+                            series.colorScale(linearColor);
+                            series.hovered()
+                                    .fill("#f48fb1")
+                                    .stroke("#f99fb9");
+                            series.selected()
+                                    .fill("#c2185b")
+                                    .stroke("#c2185b");
+                            series.labels().enabled(true);
+                            series.labels().fontSize(10);
+                            series.labels().fontColor("#212121");
+                            series.labels().format("{%Value}");
+                            series.tooltip()
+                                    .useHtml(true)
+                                    .format("function() {\n" +
+                                            "            return '<span style=\"font-size: 13px\">' + this.value + ' %</span>';\n" +
+                                            "          }");
+
+
+
+                            anyChartView.addScript("file:///android_asset/uganda.js");
+                            anyChartView.addScript("file:///android_asset/proj4.js");
+                            anyChartView.setChart(map);
+
+
+                            Log.e("here GraphData 2", ""+res.length());
+
+
+
+                        }else{
+                            Toast.makeText(getActivity(), "message failed!", Toast.LENGTH_SHORT).show();
+                            if(dialog.isShowing()){
+                                dialog.dismiss();
+                            }
+                        }
+                    } catch (JSONException localJSONException) {
+                        Log.e("gettingjson", localJSONException.toString());
+                        localJSONException.printStackTrace();
+                        if(dialog.isShowing()){
+                            dialog.dismiss();
+                        }
+                    }
+                }
+            }
+            @Override
+            protected void onPreExecute()
+            {
+                //dialog = ProgressDialog.show(getActivity(), "", "Loading Data...", true);
+                //dialog.setCancelable(true);
+            }
+
+        };
+        mAdultsDistrictMap.execute(mRegion, mWeek);
+
+    }
+
+    //regional district graph function
+    public void getRegionalDistrictDataSTKA(final String mRegion,final String mWeek){
+        mAdultsDistrictMap = new AdultsDistrictMap() {
+            @Override
+            protected void onPostExecute(String results) {
+                //dialog.dismiss();
+                if (!results.equalsIgnoreCase("error")) {
+                    try {
+                        JSONObject obj = new JSONObject(results);
+                        if(obj.getString("status").equalsIgnoreCase("ok")) {
+
+                            Log.e("District GraphData", ""+results);
+
+                            JSONArray res = obj.getJSONArray("results");
+
+                            String[] drugs = new String[res.length()];
+
+                            for(int i= 0; i< res.length();i++){
+                                JSONArray array = res.getJSONArray(i);
+                                barEntries.add(new BarEntry(i+1,    (float) array.getDouble(2)));
+                                barEntries1.add(new BarEntry(i+1, (float) array.getDouble(1)));
+                                drugs[i] = array.getString(3);
+                            }
+                            BarDataSet barDataSet = new BarDataSet(barEntries,"Stockouts");
+                            barDataSet.setColor(Color.parseColor("#7CB5EC"));
+                            Collections.sort(barEntries, new EntryXComparator());
+                            BarDataSet barDataSet1 = new BarDataSet(barEntries1,"Clients at risk(*100)");
+                            barDataSet1.setColors(Color.parseColor("#000000"));
+                            Collections.sort(barEntries1, new EntryXComparator());
+                            barProg.setVisibility(View.GONE);
+                            BarData data = new BarData(barDataSet,barDataSet1);
+                            barChart.setData(data);
+
+                            barProg.setVisibility(View.GONE);
+
+                            XAxis xAxisB = barChart.getXAxis();
+                            xAxisB.setValueFormatter(new IndexAxisValueFormatter(drugs));
+                            barChart.getAxisLeft().setAxisMinimum(0);
+                            xAxisB.setPosition(XAxis.XAxisPosition.BOTTOM);
+                            xAxisB.setGranularity(1);
+                            xAxisB.setLabelRotationAngle(45);
+                            xAxisB.setCenterAxisLabels(true);
+                            xAxisB.setGranularityEnabled(true);
+
+                            barChart.setFitBars(true);
+
+                            float barSpace = 0.01f;
+                            float groupSpace = 0.1f;
+                            int groupCount = 12;
+
+                            //IMPORTANT *****
+                            data.setBarWidth(0.15f);
+                            barChart.getXAxis().setAxisMinimum(0);
+                            barChart.getXAxis().setAxisMaximum(0 + barChart.getBarData().getGroupWidth(groupSpace, barSpace) * groupCount);
+                            barChart.groupBars(0, groupSpace, barSpace); // perform the "explicit" grouping
+                            //***** IMPORTANT
+
+                            Log.e("here GraphData 2", ""+res.length());
+
+
+
+                        }else{
+                            Toast.makeText(getActivity(), "message failed!", Toast.LENGTH_SHORT).show();
+                            if(dialog.isShowing()){
+                                dialog.dismiss();
+                            }
+                        }
+                    } catch (JSONException localJSONException) {
+                        Log.e("gettingjson", localJSONException.toString());
+                        localJSONException.printStackTrace();
+                        if(dialog.isShowing()){
+                            dialog.dismiss();
+                        }
+                    }
+                }
+            }
+            @Override
+            protected void onPreExecute()
+            {
+                //dialog = ProgressDialog.show(getActivity(), "", "Loading Data...", true);
+                //dialog.setCancelable(true);
+            }
+
+        };
+        mAdultsDistrictMap.execute(mRegion, mWeek);
+
+    }
+
     @Override
     public void onResume() {
         super.onResume();
         //getAdultsData(myvalue1,myvalue2,myvalue3);
     }
+    // Selected District map
+    public void getSTKCSelectedMapData(final String mLevel,final String mWeek, final String mEntity){
+        mSTKCSingleMapData = new STKCSingleMapData() {
+            @Override
+            protected void onPostExecute(String results) {
+                //dialog.dismiss();
+                if (!results.equalsIgnoreCase("error")) {
+                    try {
+                        JSONObject obj = new JSONObject(results);
+                        if(obj.getString("status").equalsIgnoreCase("ok")) {
+
+                            Log.e("Single MapData", ""+results);
+
+                            JSONArray res = obj.getJSONArray("results");
+
+                            String[] drugs = new String[res.length()];
+
+                            for(int i= 0; i< res.length();i++){
+                                JSONArray array = res.getJSONArray(i);
+                                MapData.add(new LifeStyleTabFragment.CustomDataEntry(array.getString(0), array.getString(3), (float) array.getDouble(1)));
+                            }
+                            map = AnyChart.map();
+                            //Choropleth series = map.choropleth(getData());
+                            map.geoData("anychart.maps.uganda");
+                            map.interactivity().selectionMode(SelectionMode.NONE);
+                            map.padding(0, 0, 0, 0);
+
+                            Choropleth series = map.choropleth(MapData);
+                            LinearColor linearColor = LinearColor.instantiate();
+                            linearColor.colors(new String[]{ "#ADFF2F", "#FFFF00", "#FF0000", "#bf0000"});
+                            series.colorScale(linearColor);
+                            series.hovered()
+                                    .fill("#f48fb1")
+                                    .stroke("#f99fb9");
+                            series.selected()
+                                    .fill("#c2185b")
+                                    .stroke("#c2185b");
+                            series.labels().enabled(true);
+                            series.labels().fontSize(10);
+                            series.labels().fontColor("#212121");
+                            series.labels().format("{%Value}");
+                            series.tooltip()
+                                    .useHtml(true)
+                                    .format("function() {\n" +
+                                            "            return '<span style=\"font-size: 13px\">' + this.value + ' %</span>';\n" +
+                                            "          }");
 
 
+
+                            anyChartView.addScript("file:///android_asset/uganda.js");
+                            anyChartView.addScript("file:///android_asset/proj4.js");
+                            anyChartView.setChart(map);
+
+
+                            Log.e("here GraphData 2", ""+res.length());
+
+
+
+                        }else{
+                            Toast.makeText(getActivity(), "message failed!", Toast.LENGTH_SHORT).show();
+                            if(dialog.isShowing()){
+                                dialog.dismiss();
+                            }
+                        }
+                    } catch (JSONException localJSONException) {
+                        Log.e("gettingjson", localJSONException.toString());
+                        localJSONException.printStackTrace();
+                        if(dialog.isShowing()){
+                            dialog.dismiss();
+                        }
+                    }
+                }
+            }
+            @Override
+            protected void onPreExecute()
+            {
+                //dialog = ProgressDialog.show(getActivity(), "", "Loading Data...", true);
+                //dialog.setCancelable(true);
+            }
+
+        };
+        mSTKCSingleMapData.execute(mLevel, mWeek,mEntity);
+
+    }
+    //check internet connection
+    public static boolean isNetworkStatusAvialable (Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null)
+        {
+            NetworkInfo netInfos = connectivityManager.getActiveNetworkInfo();
+            if(netInfos != null)
+            {
+                return netInfos.isConnected();
+            }
+        }
+        return false;
+    }
 }

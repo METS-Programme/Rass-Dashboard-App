@@ -1,7 +1,10 @@
 package com.mets.rassdasshboard.app;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,7 +20,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment  {
     public static TabLayout tabLayout;
     public static ViewPager viewPager;
     public static int int_items = 3 ;
@@ -40,6 +43,7 @@ public class HomeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
 
         /**
          *Inflate tab_layout and setup Views.
@@ -91,6 +95,12 @@ public class HomeFragment extends Fragment {
                     bundle.putString("SelectValue_Entity",myvalue2);
                     bundle.putString("SelectValue_Period",myvalue3);
                     Adults.setArguments(bundle);
+                  /*  AdultsTabFragment Adults = new AdultsTabFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("SelectValue_OrgUnit",myvalue1);
+                    bundle.putString("SelectValue_Entity",myvalue2);
+                    bundle.putString("SelectValue_Period",myvalue3);
+                    Adults.setArguments(bundle);*/
                     return Adults;
                 case 1 :
                     AutoTabFragment STKC = new AutoTabFragment();
@@ -101,7 +111,7 @@ public class HomeFragment extends Fragment {
                     STKC.setArguments(bundleSTKC);
                     return STKC;
                 case 2 :
-                    AutoTabFragment RTK = new AutoTabFragment();
+                    ExpoTabFragment RTK = new ExpoTabFragment();
                     Bundle bundleRTK = new Bundle();
                     bundleRTK.putString("SelectValue_OrgUnit",myvalue1);
                     bundleRTK.putString("SelectValue_Entity",myvalue2);
@@ -131,4 +141,6 @@ public class HomeFragment extends Fragment {
             return null;
         }
     }
+
+
 }

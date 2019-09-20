@@ -1,0 +1,54 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:orientation="horizontal"
+android:layout_width = "fill_parent"
+android:layout_height = "wrap_content" >
+
+    <!-- Header Section  -->
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:id="@+id/Header"
+        android:background="@color/blue"
+        android:layout_height="50dp">
+
+        <TextView
+            android:id="@+id/txt_alert_title"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_alignBottom="@+id/btn_cancel"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:gravity="center_horizontal|center_vertical"
+            android:padding="5dp"
+            android:textSize="25dp"
+            android:text="Health Facility"
+            android:textColor="@color/white" />
+
+        <ImageButton
+            android:id="@+id/btn_cancel"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:layout_alignParentTop="true"
+            android:background="@null"
+            android:padding="10dp"
+            android:src="@drawable/exit_white"/>
+
+
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_below="@+id/Header"
+        android:layout_height="wrap_content">
+        <ListView
+            android:id = "@+id/listview"
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:divider = "@null" />
+    </RelativeLayout>
+
+
+</RelativeLayout>
