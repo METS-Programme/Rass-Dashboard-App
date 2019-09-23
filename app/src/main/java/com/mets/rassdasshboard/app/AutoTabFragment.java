@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.icu.util.Calendar;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
@@ -111,6 +114,7 @@ public class AutoTabFragment  extends Fragment {
     List<DataEntry> data = new ArrayList<>();
     ArrayList<BarEntry> data1 = new ArrayList<>();
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -124,9 +128,10 @@ public class AutoTabFragment  extends Fragment {
                 myvalue3 = getArguments().getString("SelectValue_Period");
                 Log.e("here data", "" + myvalue1);
             }else{
+                Calendar cal = Calendar.getInstance();
                 myvalue1 = "National";
                 myvalue2 = "Uganda";
-                myvalue3 = "2019W34";
+                myvalue3 = cal.get(Calendar.YEAR)+"W"+(cal.get(Calendar.WEEK_OF_YEAR)-1);
             }
         }
         initView(rootView);

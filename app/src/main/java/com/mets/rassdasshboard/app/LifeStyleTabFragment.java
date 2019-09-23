@@ -6,8 +6,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.icu.util.Calendar;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -26,6 +28,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
@@ -76,7 +79,9 @@ import org.json.JSONObject;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import android.icu.util.Calendar;
 
 public class LifeStyleTabFragment extends Fragment  {
     private CombinedChart mChart;
@@ -109,6 +114,7 @@ public class LifeStyleTabFragment extends Fragment  {
     AnyChartView anyChartView;
 
     List<DataEntry> MapData = new ArrayList<>();
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -124,9 +130,11 @@ public class LifeStyleTabFragment extends Fragment  {
                 myvalue3 = getArguments().getString("SelectValue_Period");
                 Log.e("here data", "" + myvalue1);
             }else{
+                Calendar cal = Calendar.getInstance();
                 myvalue1 = "National";
                 myvalue2 = "Uganda";
-                myvalue3 = "2019W34";
+                myvalue3 = cal.get(Calendar.YEAR)+"W"+(cal.get(Calendar.WEEK_OF_YEAR)-1);
+
             }
         }
 

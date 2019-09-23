@@ -2,6 +2,8 @@ package com.mets.rassdasshboard.app;
 
 import android.app.ProgressDialog;
 import android.graphics.Color;
+import android.icu.util.Calendar;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.anychart.AnyChart;
@@ -88,6 +91,7 @@ public class ExpoTabFragment extends Fragment {
     AnyChartView anyChartView;
     List<DataEntry> data = new ArrayList<>();
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -102,9 +106,10 @@ public class ExpoTabFragment extends Fragment {
                 myvalue3 = getArguments().getString("SelectValue_Period");
                 Log.e("here data", "" + myvalue1);
             }else{
+                Calendar cal = Calendar.getInstance();
                 myvalue1 = "National";
                 myvalue2 = "Uganda";
-                myvalue3 = "2019W34";
+                myvalue3 = cal.get(Calendar.YEAR)+"W"+(cal.get(Calendar.WEEK_OF_YEAR)-1);
             }
         }
         getRTKsData(myvalue1,myvalue2,myvalue3);

@@ -4,7 +4,6 @@ public class Constants {
 
     // musa url
     //public static final String API = "http://192.168.1.207:8080/rass-api/";
-    //public static final String API = "http://192.168.0.100:8080/rass-api/";
 
     // Live url
     public static final String API = "https://rass.mets.or.ug/api/";
