@@ -171,7 +171,7 @@ public class AutoTabFragment  extends Fragment {
     private LineData generateLineData() {
 
         LineData d = new LineData();
-        LineDataSet set = new LineDataSet(ReportingRates, " Adult ARVs (Reporting Rates)");
+        LineDataSet set = new LineDataSet(ReportingRates, " Paediatrics ARVs (Reporting Rates)");
         set.setColors(Color.parseColor("#90ed7d"));
         set.setLineWidth(2.5f);
         set.setCircleColor(Color.parseColor("#90ed7d"));
@@ -188,7 +188,7 @@ public class AutoTabFragment  extends Fragment {
     private LineData generateLineData2() {
 
         LineData d2 = new LineData();
-        LineDataSet set = new LineDataSet(StockoutRates, "  Adult ARVs (Stockout Rates)");
+        LineDataSet set = new LineDataSet(StockoutRates, "  Paediatrics ARVs (Stockout Rates)");
         set.setColors(Color.parseColor("#434348"));
         set.setLineWidth(2.5f);
         set.setCircleColor(Color.parseColor("#434348"));
@@ -203,7 +203,7 @@ public class AutoTabFragment  extends Fragment {
         return d2;
     }
     private BarData generateBarData() {
-        BarDataSet set1 = new BarDataSet(ClientRisk, "Client (at Risk)-");
+        BarDataSet set1 = new BarDataSet(ClientRisk, "Client (at Risk)-Paediatrics");
         set1.setColors(Color.parseColor("#7CB5EC"));
         set1.setAxisDependency(YAxis.AxisDependency.RIGHT);
         float barWidth = 0.8f; // x2 dataset
@@ -280,8 +280,8 @@ public class AutoTabFragment  extends Fragment {
                                 txtRptPg.setText(v.format(z)+"%");
                                 txtRptDls.setText(rptStock_out+" "+"of"+" "+rptRecieved+" "+"Health Facilities Stocked Out");
 
-                                txtAdultsNm.setText("Adults"+" "+"("+Wk+")");
-                                txtTNm_d.setText("Adults"+" "+"("+Wk+")");
+                                txtAdultsNm.setText("Paediatrics"+" "+"("+Wk+")");
+                                txtTNm_d.setText("Paediatrics"+" "+"("+Wk+")");
 
                                 //getSTKCGraphData(mlevel,Wk);
 
@@ -364,7 +364,7 @@ public class AutoTabFragment  extends Fragment {
                             BarDataSet barDataSet = new BarDataSet(barEntries,"Stockouts");
                             barDataSet.setColor(Color.parseColor("#7CB5EC"));
                             Collections.sort(barEntries, new EntryXComparator());
-                            BarDataSet barDataSet1 = new BarDataSet(barEntries1,"Clients at risk(*100)");
+                            BarDataSet barDataSet1 = new BarDataSet(barEntries1,"Clients at risk(*100 -Paediatrics)");
                             barDataSet1.setColors(Color.parseColor("#000000"));
                             Collections.sort(barEntries1, new EntryXComparator());
 
@@ -452,7 +452,7 @@ public class AutoTabFragment  extends Fragment {
                             BarDataSet barDataSet = new BarDataSet(barEntries,"Stockouts");
                             barDataSet.setColor(Color.parseColor("#7CB5EC"));
                             Collections.sort(barEntries, new EntryXComparator());
-                            BarDataSet barDataSet1 = new BarDataSet(barEntries1,"Clients at risk(*100)");
+                            BarDataSet barDataSet1 = new BarDataSet(barEntries1,"Clients at risk(*100) -Paediatrics");
                             barDataSet1.setColors(Color.parseColor("#000000"));
                             Collections.sort(barEntries1, new EntryXComparator());
 
@@ -543,7 +543,7 @@ public class AutoTabFragment  extends Fragment {
                             BarDataSet barDataSet = new BarDataSet(barEntries,"Stockouts");
                             barDataSet.setColor(Color.parseColor("#7CB5EC"));
                             Collections.sort(barEntries, new EntryXComparator());
-                            BarDataSet barDataSet1 = new BarDataSet(barEntries1,"Clients at risk(*100)");
+                            BarDataSet barDataSet1 = new BarDataSet(barEntries1,"Clients at risk(*100) -Paediatrics");
                             barDataSet1.setColors(Color.parseColor("#000000"));
                             Collections.sort(barEntries1, new EntryXComparator());
 

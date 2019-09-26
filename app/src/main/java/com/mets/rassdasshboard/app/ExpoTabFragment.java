@@ -146,7 +146,7 @@ public class ExpoTabFragment extends Fragment {
     private LineData generateLineData() {
 
         LineData d = new LineData();
-        LineDataSet set = new LineDataSet(ReportingRates, " Adult ARVs (Reporting Rates)");
+        LineDataSet set = new LineDataSet(ReportingRates, " RTKS ARVs (Reporting Rates)");
         set.setColors(Color.parseColor("#90ed7d"));
         set.setLineWidth(2.5f);
         set.setCircleColor(Color.parseColor("#90ed7d"));
@@ -163,7 +163,7 @@ public class ExpoTabFragment extends Fragment {
     private LineData generateLineData2() {
 
         LineData d2 = new LineData();
-        LineDataSet set = new LineDataSet(StockoutRates, "  Adult ARVs (Stockout Rates)");
+        LineDataSet set = new LineDataSet(StockoutRates, "  RTKS ARVs (Stockout Rates)");
         set.setColors(Color.parseColor("#434348"));
         set.setLineWidth(2.5f);
         set.setCircleColor(Color.parseColor("#434348"));
@@ -178,7 +178,7 @@ public class ExpoTabFragment extends Fragment {
         return d2;
     }
     private BarData generateBarData() {
-        BarDataSet set1 = new BarDataSet(ClientRisk, "Client (at Risk)-");
+        BarDataSet set1 = new BarDataSet(ClientRisk, "Client (at Risk)- RTKS");
         set1.setColors(Color.parseColor("#7CB5EC"));
         set1.setAxisDependency(YAxis.AxisDependency.RIGHT);
         float barWidth = 0.8f; // x2 dataset
@@ -252,8 +252,8 @@ public class ExpoTabFragment extends Fragment {
                                 txtRptPg.setText(v.format(z)+"%");
                                 txtRptDls.setText(rptStock_out+" "+"of"+" "+rptRecieved+" "+"Health Facilities Stocked Out");
 
-                                txtAdultsNm.setText("Adults"+" "+"("+Wk+")");
-                                txtTNm_d.setText("Adults"+" "+"("+Wk+")");
+                                txtAdultsNm.setText("RTKS"+" "+"("+Wk+")");
+                                txtTNm_d.setText("RTKS"+" "+"("+Wk+")");
 
                                 TxtTitle_commodity_skt.setText("HIV Commodity Stockout rates - Last 12 Weeks"+" "+"("+Enty+")");
                                 // check for selection
@@ -333,7 +333,7 @@ public class ExpoTabFragment extends Fragment {
                             BarDataSet barDataSet = new BarDataSet(barEntries,"Stockouts");
                             barDataSet.setColor(Color.parseColor("#7CB5EC"));
                             Collections.sort(barEntries, new EntryXComparator());
-                            BarDataSet barDataSet1 = new BarDataSet(barEntries1,"Clients at risk(*100)");
+                            BarDataSet barDataSet1 = new BarDataSet(barEntries1,"Clients at risk(*100) -RTKS");
                             barDataSet1.setColors(Color.parseColor("#000000"));
                             Collections.sort(barEntries1, new EntryXComparator());
 
@@ -419,7 +419,7 @@ public class ExpoTabFragment extends Fragment {
                             BarDataSet barDataSet = new BarDataSet(barEntries,"Stockouts");
                             barDataSet.setColor(Color.parseColor("#7CB5EC"));
                             Collections.sort(barEntries, new EntryXComparator());
-                            BarDataSet barDataSet1 = new BarDataSet(barEntries1,"Clients at risk(*100)");
+                            BarDataSet barDataSet1 = new BarDataSet(barEntries1,"Clients at risk(*100) -RTKS");
                             barDataSet1.setColors(Color.parseColor("#000000"));
                             Collections.sort(barEntries1, new EntryXComparator());
 

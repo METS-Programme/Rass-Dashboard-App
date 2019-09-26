@@ -134,7 +134,6 @@ public class LifeStyleTabFragment extends Fragment  {
                 myvalue1 = "National";
                 myvalue2 = "Uganda";
                 myvalue3 = cal.get(Calendar.YEAR)+"W"+(cal.get(Calendar.WEEK_OF_YEAR)-1);
-
             }
         }
 
@@ -226,7 +225,9 @@ public class LifeStyleTabFragment extends Fragment  {
 
         anyChartView.addScript("file:///android_asset/uganda.js");
         anyChartView.addScript("file:///android_asset/proj4.js");
-        anyChartView.setChart(map);
+
+
+
     }
 
 
@@ -605,7 +606,8 @@ public class LifeStyleTabFragment extends Fragment  {
                             JSONArray res = obj.getJSONArray("results");
                             for(int i= 0; i< res.length();i++){
                                 JSONArray array = res.getJSONArray(i);
-                                MapData.add(new LifeStyleTabFragment.CustomDataEntry(array.getString(0), array.getString(3), (float) array.getDouble(1)));
+                               MapData.add(new CustomDataEntry(array.getString(0), array.getString(3), (float) array.getDouble(1)));
+
                             }
                             map = AnyChart.map();
                             //Choropleth series = map.choropleth(getData());
@@ -936,7 +938,7 @@ public class LifeStyleTabFragment extends Fragment  {
 
                             for(int i= 0; i< res.length();i++){
                                 JSONArray array = res.getJSONArray(i);
-                                MapData.add(new LifeStyleTabFragment.CustomDataEntry(array.getString(0), array.getString(3), (float) array.getDouble(1)));
+                                MapData.add(new CustomDataEntry(array.getString(0), array.getString(3), (float) array.getDouble(1)));
                             }
                             map = AnyChart.map();
                             //Choropleth series = map.choropleth(getData());
@@ -1114,7 +1116,7 @@ public class LifeStyleTabFragment extends Fragment  {
 
                             for(int i= 0; i< res.length();i++){
                                 JSONArray array = res.getJSONArray(i);
-                                MapData.add(new LifeStyleTabFragment.CustomDataEntry(array.getString(0), array.getString(3), (float) array.getDouble(1)));
+                                MapData.add(new CustomDataEntry(array.getString(0), array.getString(3), (float) array.getDouble(1)));
                             }
                             map = AnyChart.map();
                             //Choropleth series = map.choropleth(getData());
