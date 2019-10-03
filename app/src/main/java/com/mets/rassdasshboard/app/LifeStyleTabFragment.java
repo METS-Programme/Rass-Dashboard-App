@@ -6,7 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.icu.util.Calendar;
+//import android.icu.util.Calendar;
+import java.util.Calendar;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -81,7 +82,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import android.icu.util.Calendar;
 
 public class LifeStyleTabFragment extends Fragment  {
     private CombinedChart mChart;
@@ -121,7 +121,7 @@ public class LifeStyleTabFragment extends Fragment  {
 
         View rootView = inflater.inflate(R.layout.lifestyle_tab_layout,null);
 
-
+        Calendar cal = Calendar.getInstance();
         Bundle bundle = getArguments();
         if(bundle!= null) {
             if (bundle.getString("SelectValue_OrgUnit")!=null && bundle.getString("SelectValue_Entity")!=null && bundle.getString("SelectValue_Period")!=null) {
@@ -130,7 +130,7 @@ public class LifeStyleTabFragment extends Fragment  {
                 myvalue3 = getArguments().getString("SelectValue_Period");
                 Log.e("here data", "" + myvalue1);
             }else{
-                Calendar cal = Calendar.getInstance();
+
                 myvalue1 = "National";
                 myvalue2 = "Uganda";
                 myvalue3 = cal.get(Calendar.YEAR)+"W"+(cal.get(Calendar.WEEK_OF_YEAR)-1);
@@ -252,17 +252,17 @@ public class LifeStyleTabFragment extends Fragment  {
     private LineData generateLineData2() {
 
         LineData d2 = new LineData();
-        LineDataSet set = new LineDataSet(StockoutRates, "  Adult ARVs (Stockout Rates)");
-        set.setColors(Color.parseColor("#434348"));
-        set.setLineWidth(2.5f);
-        set.setCircleColor(Color.parseColor("#434348"));
-        set.setCircleRadius(2f);
-        set.setFillColor(Color.parseColor("#434348"));
-        set.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-        set.setDrawValues(true);
+        LineDataSet set1 = new LineDataSet(StockoutRates, " ARVs (Stockout Rates)");
+        set1.setColors(Color.parseColor("#434348"));
+        set1.setLineWidth(2.5f);
+        set1.setCircleColor(Color.parseColor("#434348"));
+        set1.setCircleRadius(2f);
+        set1.setFillColor(Color.parseColor("#434348"));
+        set1.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
+        set1.setDrawValues(true);
 
-        set.setAxisDependency(YAxis.AxisDependency.LEFT);
-        d2.addDataSet(set);
+        set1.setAxisDependency(YAxis.AxisDependency.LEFT);
+        d2.addDataSet(set1);
 
         return d2;
     }
@@ -323,24 +323,24 @@ public class LifeStyleTabFragment extends Fragment  {
 
 
                                 Log.e("Received Reports", rptRecieved);
-                                txtpag.setText(rptRecieved +" "+"of"+" "+rptExpt+" "+"Health Facilities Reported [Missing Reports]");
+                                txtpag.setText(rptStock_out+" "+"of"+" "+rptRecieved+" "+"Health Facilities Stocked Out");
 
+                                int x = Integer.parseInt(rptStock_out);
+                                int y = Integer.parseInt(rptRecieved);
+                                double z = ((double) x/y)*100;
+                                DecimalFormat v = new DecimalFormat("#.#");
+                                txtPg.setText(v.format(z)+"%");
+                                txtName.setText("Stock Out Rate :"+Wk+"("+Enty+")");
+
+                                txtRptrate.setText("Reporting Rate : "+Wk+"("+Enty+")");
                                 int a = Integer.parseInt(rptRecieved);
                                 int b = Integer.parseInt(rptExpt);
                                 double result = ((double) a/b)*100;
 
                                 Log.e("txt", String.valueOf(result));
                                 DecimalFormat value = new DecimalFormat("#.#");
-                                txtPg.setText(value.format(result)+"%");
-                                txtName.setText("Stock Out Rate :"+Wk+"("+Enty+")");
-
-                                txtRptrate.setText("Reporting Rate : "+Wk+"("+Enty+")");
-                                int x = Integer.parseInt(rptStock_out);
-                                int y = Integer.parseInt(rptRecieved);
-                                double z = ((double) x/y)*100;
-                                DecimalFormat v = new DecimalFormat("#.#");
-                                txtRptPg.setText(v.format(z)+"%");
-                                txtRptDls.setText(rptStock_out+" "+"of"+" "+rptRecieved+" "+"Health Facilities Stocked Out");
+                                txtRptPg.setText(value.format(result)+"%");
+                                txtRptDls.setText(rptRecieved +" "+"of"+" "+rptExpt+" "+"Health Facilities Reported [Missing Reports]");
 
                                 txtAdultsNm.setText("Adults"+" "+"("+Wk+")");
                                 txtTNm_d.setText("Adults"+" "+"("+Wk+")");
@@ -634,6 +634,7 @@ public class LifeStyleTabFragment extends Fragment  {
                                     .format("function() {\n" +
                                             "            return '<span style=\"font-size: 13px\">' + this.value + ' %</span>';\n" +
                                             "          }");
+
 
 
 

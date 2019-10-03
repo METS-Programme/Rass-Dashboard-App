@@ -2,7 +2,8 @@ package com.mets.rassdasshboard.app;
 
 import android.app.ProgressDialog;
 import android.graphics.Color;
-import android.icu.util.Calendar;
+//import android.icu.util.Calendar;
+import java.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -232,25 +233,25 @@ public class ExpoTabFragment extends Fragment {
                                 final String mUid = obj.getJSONArray("results").getJSONObject(0).getString("uid");
                                 final String mYear = obj.getJSONArray("results").getJSONObject(0).getString("yr");
                                 final String mWeekNo = obj.getJSONArray("results").getJSONObject(0).getString("weekno");
-                                Log.e("Received Reports", rptRecieved);
-                                txtpag.setText(rptRecieved +" "+"of"+" "+rptExpt+" "+"Health Facilities Reported [Missing Reports]");
 
+                                txtpag.setText(rptStock_out+" "+"of"+" "+rptRecieved+" "+"Health Facilities Stocked Out");
+
+                                int x = Integer.parseInt(rptStock_out);
+                                int y = Integer.parseInt(rptRecieved);
+                                double z = ((double) x/y)*100;
+                                DecimalFormat v = new DecimalFormat("#.#");
+                                txtPg.setText(v.format(z)+"%");
+                                txtName.setText("Stock Out Rate :"+Wk+"("+Enty+")");
+
+                                txtRptrate.setText("Reporting Rate : "+Wk+"("+Enty+")");
                                 int a = Integer.parseInt(rptRecieved);
                                 int b = Integer.parseInt(rptExpt);
                                 double result = ((double) a/b)*100;
 
                                 Log.e("txt", String.valueOf(result));
                                 DecimalFormat value = new DecimalFormat("#.#");
-                                txtPg.setText(value.format(result)+"%");
-                                txtName.setText("Stock Out Rate :"+Wk+"("+Enty+")");
-
-                                txtRptrate.setText("Reporting Rate : "+Wk+"("+Enty+")");
-                                int x = Integer.parseInt(rptStock_out);
-                                int y = Integer.parseInt(rptRecieved);
-                                double z = ((double) x/y)*100;
-                                DecimalFormat v = new DecimalFormat("#.#");
-                                txtRptPg.setText(v.format(z)+"%");
-                                txtRptDls.setText(rptStock_out+" "+"of"+" "+rptRecieved+" "+"Health Facilities Stocked Out");
+                                txtRptPg.setText(value.format(result)+"%");
+                                txtRptDls.setText(rptRecieved +" "+"of"+" "+rptExpt+" "+"Health Facilities Reported [Missing Reports]");
 
                                 txtAdultsNm.setText("RTKS"+" "+"("+Wk+")");
                                 txtTNm_d.setText("RTKS"+" "+"("+Wk+")");

@@ -5,7 +5,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.icu.util.Calendar;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -19,6 +21,7 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -28,7 +31,9 @@ import com.mets.rassdasshboard.app.services.ConnectionClass;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class FilterLevelActivity_Editted extends AppCompatActivity implements View.OnClickListener,
         AdapterView.OnItemClickListener,AdapterView.OnItemSelectedListener{
@@ -163,14 +168,19 @@ public class FilterLevelActivity_Editted extends AppCompatActivity implements Vi
             intent = new Intent(FilterLevelActivity_Editted.this, MainActivity.class);
             intent.putExtra("SelectValue_OrgUnit", mSpnerOrgs);
             intent.putExtra("SelectValue_Entity", mSpnEntity);
-            String m = mSpnPeriod.replace(("Week"+" "+"("),"");
+            String m = mSpnPeriod.substring(23);
             String x = m.replace((")"),"");
             intent.putExtra("SelectValue_Period", x);
             startActivity(intent);
             finish();
         }
     }
-
+    public String removeLast(String s, int n) {
+        if (null != s && !s.isEmpty()) {
+            s = s.substring(0, s.length()-n);
+        }
+        return s;
+    }
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
@@ -321,6 +331,7 @@ public class FilterLevelActivity_Editted extends AppCompatActivity implements Vi
 
         }
 
+        @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         protected void onPostExecute(String results){
 
@@ -354,11 +365,19 @@ public class FilterLevelActivity_Editted extends AppCompatActivity implements Vi
                             JSONObject jsonObject = jsonArrayPeriod.getJSONObject(i);
                             String item_no = jsonObject.getString("weekno");
                             String item_name = jsonObject.getString("week");
+                            String item_year = jsonObject.getString("year");
+
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.clear();
+                            calendar.set(Calendar.WEEK_OF_YEAR, Integer.valueOf(item_no));
+                            calendar.set(Calendar.YEAR, Integer.valueOf(item_year));
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                            String outputDate = simpleDateFormat.format(calendar.getTime());
 
                             nameslistPeriod.add("Week"+" "+"("+item_name+")");
                             //nameslistPeriod.add(item_name);
                             countrycodelistPeriod.add(item_no);
-                            adapter_Period.add("Week"+" "+"("+item_name+")");
+                            adapter_Period.add("Week ending"+" "+ outputDate+"("+item_name+")");
                             //adapter_Period.add(item_name);
                         }
                         //  adapter_c.notifyDataSetChanged();

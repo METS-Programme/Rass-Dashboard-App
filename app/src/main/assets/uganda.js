@@ -2386,7 +2386,7 @@ window['anychart']['maps']['uganda'] = {
             "code": null,
             "name": "Iganga District",
             "level": "3",
-            "id": "Iganga",
+            "id": "oNxpMjveyZt",
             "parent": "adZ6T35ve4h",
             "parentGraph": "/akV6429SUqu/adZ6T35ve4h",
             "groups": ["mXZ3sCCGEcD", "NbXtEe33was"]
@@ -2523,7 +2523,7 @@ window['anychart']['maps']['uganda'] = {
             "code": null,
             "name": "Jinja District",
             "level": "3",
-            "id": "Jinja",
+            "id": "gJR2ZxSH7g4",
             "parent": "adZ6T35ve4h",
             "parentGraph": "/akV6429SUqu/adZ6T35ve4h",
             "groups": ["mXZ3sCCGEcD", "NbXtEe33was", "kFOifq46lEt"]
@@ -3152,7 +3152,7 @@ window['anychart']['maps']['uganda'] = {
             "code": null,
             "name": "Kamuli District",
             "level": "3",
-            "id": "Kamuli",
+            "id": "oyygQ2STBST",
             "parent": "adZ6T35ve4h",
             "parentGraph": "/akV6429SUqu/adZ6T35ve4h",
             "groups": ["mXZ3sCCGEcD", "NbXtEe33was"]
@@ -4335,7 +4335,7 @@ window['anychart']['maps']['uganda'] = {
         "properties": {
             "code": null,
             "name": "Koboko District",
-            "id": "Koboko",
+            "id": "iqsaGItA68C",
             "level": "3",
             "parent": "pz9Uu65Irbg",
             "parentGraph": "/akV6429SUqu/pz9Uu65Irbg",
@@ -5069,7 +5069,7 @@ window['anychart']['maps']['uganda'] = {
         "properties": {
             "code": null,
             "name": "Lamwo District",
-            "id": "Lamwo",
+            "id": "xy0M4HhjXtD",
             "level": "3",
             "parent": "pz9Uu65Irbg",
             "parentGraph": "/akV6429SUqu/pz9Uu65Irbg",
@@ -6994,7 +6994,7 @@ window['anychart']['maps']['uganda'] = {
         "properties": {
             "code": null,
             "name": "Namayingo District",
-            "id": "Namayingo",
+            "id": "Ut0ysYGEipO",
             "level": "3",
             "parent": "adZ6T35ve4h",
             "parentGraph": "/akV6429SUqu/adZ6T35ve4h",
@@ -7547,7 +7547,7 @@ window['anychart']['maps']['uganda'] = {
         "properties": {
             "code": null,
             "name": "Nwoya District",
-            "id": "Nwoya",
+            "id": "zNgVoDVPYgD",
             "level": "3",
             "parent": "pz9Uu65Irbg",
             "parentGraph": "/akV6429SUqu/pz9Uu65Irbg",
@@ -7858,7 +7858,7 @@ window['anychart']['maps']['uganda'] = {
         "properties": {
             "code": null,
             "name": "Pader District",
-            "id": "Pader",
+            "id": "gBrjuZk0W31",
             "level": "3",
             "parent": "pz9Uu65Irbg",
             "parentGraph": "/akV6429SUqu/pz9Uu65Irbg",
