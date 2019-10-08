@@ -133,7 +133,8 @@ public class LifeStyleTabFragment extends Fragment  {
 
                 myvalue1 = "National";
                 myvalue2 = "Uganda";
-                myvalue3 = cal.get(Calendar.YEAR)+"W"+(cal.get(Calendar.WEEK_OF_YEAR)-1);
+                myvalue3 = String.format("%dW%d",  cal.get(Calendar.YEAR), cal.get(Calendar.WEEK_OF_YEAR));
+               // Log.i("TAG DATES HERE", ""+myvalue3);
             }
         }
 
@@ -160,7 +161,6 @@ public class LifeStyleTabFragment extends Fragment  {
 
                 }
             });
-
 
         }
         return rootView;
@@ -365,6 +365,9 @@ public class LifeStyleTabFragment extends Fragment  {
                                 }
                                 getAdultsCommodSTKA(mUid,mYear,mWeekNo);
 
+                            }else {
+
+                                Toast.makeText(getActivity(), "message failed!", Toast.LENGTH_SHORT).show();
                             }
 
                         }else{

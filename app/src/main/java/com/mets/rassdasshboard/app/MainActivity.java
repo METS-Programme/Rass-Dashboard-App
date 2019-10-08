@@ -2,6 +2,7 @@ package com.mets.rassdasshboard.app;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -18,6 +19,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
+import com.mets.rassdasshboard.app.db.Constants;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -96,11 +98,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     FragmentTransaction fragmentTransaction = myFragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.containerView, new HomeFragment()).commit();
                 }
-               /* if (selectedMenuItem.getItemId() == R.id.nav_slideshow) {
+                if (selectedMenuItem.getItemId() == R.id.nav_tools) {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.dhis_url));
+                    startActivity(browserIntent);
 
-                    FragmentTransaction xfragmentTransaction = myFragmentManager.beginTransaction();
-                    xfragmentTransaction.replace(R.id.containerView, new BookmarkFragment()).commit();
-                }*/
+                }
                 return false;
             }
         });

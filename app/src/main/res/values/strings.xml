@@ -18,5 +18,6 @@
     <string name="menu_stock_status">Stock Status</string>
     <string name="menu_recieved_stock">Recived Stock</string>
     <string name="menu_Reports">Reports</string>
+    <string name="menu_dhis2">DHIS Data Entry</string>
     <string name="action_level_filter">Level/Period - Filter</string>
 </resources>

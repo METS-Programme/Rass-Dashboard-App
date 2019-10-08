@@ -132,7 +132,7 @@ public class AutoTabFragment  extends Fragment {
                 Calendar cal = Calendar.getInstance();
                 myvalue1 = "National";
                 myvalue2 = "Uganda";
-                myvalue3 = cal.get(Calendar.YEAR)+"W"+(cal.get(Calendar.WEEK_OF_YEAR)-1);
+                myvalue3 = String.format("%dW%d",  cal.get(Calendar.YEAR), cal.get(Calendar.WEEK_OF_YEAR));
             }
         }
         initView(rootView);

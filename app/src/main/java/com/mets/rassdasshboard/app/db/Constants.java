@@ -7,14 +7,14 @@ public class Constants {
 
     // Live url
     public static final String API = "https://rass.mets.or.ug/api/";
-
     // for retrieving periods drop down
     public static final String LoadPeriods =API+"?cmd=getPeriods";
-
     // for retrieving Enitity data into drop down
     public static final String LoadOrgs =API+"?cmd=getData";
     // for retrieving periods drop down
     public static final String MyStuff =API+"?cmd=myStuff";
+    // dhis url
+    public static final String dhis_url = "http://dhis.mets.or.ug";
 
 
 
