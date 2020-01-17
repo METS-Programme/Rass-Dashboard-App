@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RassApp</string>
+    <string name="app_name">Rass</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -20,4 +20,9 @@
     <string name="menu_Reports">Reports</string>
     <string name="menu_dhis2">DHIS Data Entry</string>
     <string name="action_level_filter">Level/Period - Filter</string>
+
+    <string name="versionNo">© 2019 All Rights Reserved Ministry of Health - Republic of Uganda</string>
+    <string name="version">Ver 1.0 powered by METS Programme</string>
+
+    <string name="No_Categories">No matching records found</string>
 </resources>

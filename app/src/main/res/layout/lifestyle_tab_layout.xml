@@ -273,13 +273,15 @@
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
+                                android:id="@+id/txtgrhp"
                                 android:layout_below="@+id/txtNm_d"
                                 android:layout_height="300dp">
+
                                 <com.anychart.AnyChartView
                                     android:id="@+id/any_chart_view"
                                     android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    />
+                                    android:layout_height="match_parent" />
+
 
                                 <ProgressBar
                                     android:id="@+id/progress_bar"
@@ -293,6 +295,79 @@
 
                             </RelativeLayout>
 
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_marginLeft="20dp"
+                                android:gravity="center"
+                                android:layout_below="@+id/txtgrhp"
+                                android:layout_height="30dp">
+
+                                <ImageView
+                                    android:layout_width="10dp"
+                                    android:layout_margin="10dp"
+                                    android:id="@+id/img_green"
+                                    android:src="@drawable/color_green"
+                                    android:layout_height="wrap_content" />
+                                <TextView
+                                    android:id="@+id/txtgreen"
+                                    android:layout_width="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:layout_toRightOf="@+id/img_green"
+                                    style="@style/TextAppearance.AppCompat.Small"
+                                    android:text="&lt; = 25"
+                                    android:layout_height="wrap_content" />
+
+                                <ImageView
+                                    android:layout_width="10dp"
+                                    android:layout_margin="10dp"
+                                    android:layout_toRightOf="@+id/txtgreen"
+                                    android:id="@+id/img_dark"
+                                    android:layout_centerInParent="true"
+                                    android:src="@drawable/color_gray"
+                                    android:layout_height="wrap_content" />
+                                <TextView
+                                    android:id="@+id/txtdark"
+                                    android:layout_width="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:layout_toRightOf="@+id/img_dark"
+                                    style="@style/TextAppearance.AppCompat.Small"
+                                    android:text="&lt; = 50"
+                                    android:layout_height="wrap_content" />
+
+                                <ImageView
+                                    android:layout_width="10dp"
+                                    android:layout_margin="10dp"
+                                    android:id="@+id/img_red_dark"
+                                    android:layout_toRightOf="@+id/txtdark"
+                                    android:layout_centerInParent="true"
+                                    android:src="@drawable/color_red"
+                                    android:layout_height="wrap_content" />
+                                <TextView
+                                    android:id="@+id/txtred_dark"
+                                    android:layout_width="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:layout_toRightOf="@+id/img_red_dark"
+                                    style="@style/TextAppearance.AppCompat.Small"
+                                    android:text="&lt; = 75"
+                                    android:layout_height="wrap_content" />
+
+                                <ImageView
+                                    android:layout_width="10dp"
+                                    android:layout_margin="10dp"
+                                    android:layout_toRightOf="@+id/txtred_dark"
+                                    android:id="@+id/img_red"
+                                    android:layout_centerInParent="true"
+                                    android:src="@drawable/color_dark_red"
+                                    android:layout_height="wrap_content" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:layout_toRightOf="@+id/img_red"
+                                    style="@style/TextAppearance.AppCompat.Small"
+                                    android:text="&lt; = 100"
+                                    android:layout_height="wrap_content" />
+
+                            </RelativeLayout>
                         </RelativeLayout>
 
                     </RelativeLayout>
@@ -366,18 +441,17 @@
             </RelativeLayout>
 
 
-            <!-- Section for stock status [HIV Commodities] - Number of facilities -->
+            <!-- Section for the table for commodities -->
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:id="@+id/rt_tb_stk_status"
+                android:id="@+id/table_stk_status"
                 android:layout_margin="10dp"
-                android:visibility="gone"
                 android:layout_below="@+id/rt_gph_commodity_stk_rates"
                 android:layout_height="wrap_content">
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:id="@+id/crd_tb_stk_status"
+                    android:id="@+id/crd_table_stk_status"
                     app:cardCornerRadius="5dp"
                     android:layout_margin="5dp"
                     android:layout_height="wrap_content">
@@ -394,7 +468,7 @@
 
                             <TextView
                                 android:layout_width="match_parent"
-                                android:id="@+id/txtTitle_tb_stk_status"
+                                android:id="@+id/txtTtable_stk_status"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                                 android:textColor="@color/black"
                                 android:layout_height="wrap_content"
@@ -403,107 +477,32 @@
 
                             <TextView
                                 android:layout_width="match_parent"
-                                android:id="@+id/txtNm_tb_stk_status"
-                                android:layout_below="@+id/txtTitle_tb_stk_status"
-                                android:textColor="@color/black"
-                                android:visibility="gone"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                                android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:text="Health Facility Reporting HIV Commodity Stockstatus during the reporting period"/>
+                                android:id="@+id/black_line"
+                                android:layout_marginTop="5dp"
+                                android:background="@color/black"
+                                android:layout_below="@+id/txtTtable_stk_status"
+                                android:layout_height="1dp"/>
+
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
-                                android:layout_below="@+id/txtNm_tb_stk_status"
-                                android:layout_marginTop="5dp"
-                                android:layout_height="100dp">
-                                <LinearLayout
-                                    android:id = "@+id/relativeLayout1"
-                                    android:layout_width = "fill_parent"
-                                    android:orientation="horizontal"
-                                    android:layout_height = "wrap_content"
-                                    android:background = "@color/black" >
+                                android:layout_below="@+id/black_line"
+                                android:clickable="false"
+                                android:layout_height="250dp">
 
-                                    <TextView
-                                        android:layout_width = "0dp"
-                                        android:layout_height = "wrap_content"
-                                        android:layout_weight = "1.5"
-                                        android:gravity = "center"
-                                        android:padding = "5dp"
-                                        android:text = "Commodities"
-                                        android:textColor = "#ffffff" />
-
-                                    <TextView
-                                        android:layout_width = "0dp"
-                                        android:layout_height = "wrap_content"
-                                        android:layout_weight = "1"
-                                        android:gravity = "center"
-                                        android:padding = "5dp"
-                                        android:text = "Category"
-                                        android:textColor = "#ffffff" />
-
-                                    <TextView
-                                        android:layout_width = "0dp"
-                                        android:layout_height = "wrap_content"
-                                        android:layout_weight = "1"
-                                        android:gravity = "center"
-                                        android:padding = "5dp"
-                                        android:text = "#Under"
-                                        android:textColor = "#ffffff" />
-
-                                    <TextView
-                                        android:layout_width = "0dp"
-                                        android:layout_height = "wrap_content"
-                                        android:layout_weight = "1"
-                                        android:gravity = "center"
-                                        android:padding = "5dp"
-                                        android:text = "#Adequate"
-                                        android:textColor = "#ffffff" />
-
-
-                                    <TextView
-                                        android:layout_width = "0dp"
-                                        android:layout_height = "wrap_content"
-                                        android:layout_weight = "1"
-                                        android:gravity = "center"
-                                        android:padding = "5dp"
-                                        android:text = "#Over"
-                                        android:textColor = "#ffffff" />
-
-
-                                    <TextView
-                                        android:layout_width = "0dp"
-                                        android:layout_height = "wrap_content"
-                                        android:layout_weight = "1"
-                                        android:gravity = "center"
-                                        android:padding = "5dp"
-                                        android:text = "#Stockouts"
-                                        android:textColor = "#ffffff" />
-
-
-                                    <TextView
-                                        android:layout_width = "0dp"
-                                        android:layout_height = "wrap_content"
-                                        android:layout_weight = "1"
-                                        android:gravity = "center"
-                                        android:padding = "5dp"
-                                        android:text = "#Clients"
-                                        android:textColor = "#ffffff" />
-                                    <TextView
-                                        android:layout_width = "0dp"
-                                        android:layout_height = "wrap_content"
-                                        android:layout_weight = "1"
-                                        android:gravity = "center"
-                                        android:padding = "5dp"
-                                        android:text = "#Clients at Risk"
-                                        android:textColor = "#ffffff" />
-                                </LinearLayout>
 
                                 <ListView
-                                    android:id = "@+id/listview"
-                                    android:layout_width = "match_parent"
-                                    android:layout_height = "wrap_content"
-                                    android:divider = "@null" />
+                                    android:id="@+id/lstactivites"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:scrollbarStyle="outsideInset"
+                                    android:divider="@color/white"
+                                    android:dividerHeight="0dp"
+                                    android:listSelector="@android:color/transparent"
+                                    android:scrollbars="vertical"
+                                    android:layout_marginLeft="5dp"
+                                    android:layout_marginRight="5dp" />
+
 
 
 
@@ -514,6 +513,9 @@
                     </RelativeLayout>
 
                 </androidx.cardview.widget.CardView>
+
+
+
 
             </RelativeLayout>
 

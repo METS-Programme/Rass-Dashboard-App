@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+
+        >
+
+        <LinearLayout
+            android:id="@+id/llItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerInParent="true"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="20dp"
+            android:orientation="vertical"
+            android:paddingRight="10dp" >
+
+            <TextView
+                android:id="@+id/txtDrug_name"
+                android:layout_width="match_parent"
+                android:hint="DRUG TYPE ONE"
+                android:layout_gravity="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/black"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imgDelete"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:contentDescription="@string/app_name"
+            android:paddingLeft="10dp"
+            android:layout_toRightOf="@+id/llItem"
+            android:paddingRight="10dp"
+            android:padding="5dp"
+            android:layout_margin="10dp"
+            android:scaleType="center"
+            android:src="@drawable/next" />
+
+
+    </RelativeLayout>
+
+</LinearLayout>
